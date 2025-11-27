@@ -17,29 +17,30 @@ def extract_text_images_tables(file_path):
     result = doc_converter.convert(file_path)
     doc = result.document
     text = doc.export_to_markdown() #str
-    
-    
-    image_embedings = []
-    for i, pic in enumerate(doc.pictures):
-        pil_image = pic.get_image(doc) 
-        
-        image_metadata = {
-            'source': file_path,
-            'type': 'image',
-            'image_index': i,
-            # 'page_number': pic.page_num, 
-            # 'coordinates': pic.box.tolist(), 
-            
-        }
-        embedding = get_image_embeddings(pil_image)
-            
-        image_embedings.append({
-            'embedding': embedding,
-            'metadata': image_metadata
-        })
-        
+
+
+    # TODO: Implement image handling later
+    # image_embedings = []
+    # for i, pic in enumerate(doc.pictures):
+    #     pil_image = pic.get_image(doc)
+    #
+    #     image_metadata = {
+    #         'source': file_path,
+    #         'type': 'image',
+    #         'image_index': i,
+    #         # 'page_number': pic.page_num,
+    #         # 'coordinates': pic.box.tolist(),
+    #
+    #     }
+    #     embedding = get_image_embeddings(pil_image)
+    #
+    #     image_embedings.append({
+    #         'embedding': embedding,
+    #         'metadata': image_metadata
+    #     })
+
     doc = Document(page_content = text,
                    metadata = {'source': file_path})
     doc_list = [doc]
-    return doc_list, image_embedings
+    return doc_list
 

@@ -12,18 +12,18 @@ IMAGE_EMBEDDING_MODEL = os.getenv("CLIP_MODEL")
 
 
 clip_model = CLIPModel.from_pretrained(IMAGE_EMBEDDING_MODEL)
-clip_processor = CLIPProcessor.from_pretrained(IMAGE_EMBEDDING_MODEL) # type    : ignore
+clip_processor = CLIPProcessor.from_pretrained(IMAGE_EMBEDDING_MODEL) 
 
 
 def chunk_text_and_generate_embeddings(docs):
     
-    embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL)
+    embeddings_model = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL)
     
     text_splitter = SemanticChunker(
-        embeddings=embeddings
+        embeddings=embeddings_model
     )
     doc = text_splitter.split_documents(docs)
-    return doc, embeddings
+    return doc, embeddings_model
 
 def get_image_embeddings(image):
     inputs = clip_processor(images=image, return_tensors="pt")
