@@ -1,2 +1,7 @@
 venv/
 .venv/
+ChromaDB
+extracted_images
+output_text.txt
+__pycache__
+.env

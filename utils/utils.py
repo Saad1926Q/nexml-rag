@@ -1,36 +1,44 @@
-import io
-from typing import Tuple
-import fitz        
-import docx
-import mimetypes
+from langchain_community.document_loaders import UnstructuredFileLoader
+from langchain_experimental.text_splitter import SemanticChunker
+from langchain_huggingface import HuggingFaceEmbeddings
+from dotenv import load_dotenv
+import os
+from transformers import CLIPProcessor, CLIPModel
+import torch
 
-def extract_text_from_file_content(file_bytes: bytes, filename: str) -> str:
-    """
-    Extract text from a PDF or DOCX file bytes.
-    Returns the concatenated text.
-    """
-    lower = filename.lower()
-    if lower.endswith(".pdf"):
-        return _extract_text_from_pdf_bytes(file_bytes)
-    elif lower.endswith(".docx"):
-        return _extract_text_from_docx_bytes(file_bytes)
-    else:        
-        mime, _ = mimetypes.guess_type(filename)
-        if mime == "application/pdf":
-            return _extract_text_from_pdf_bytes(file_bytes)
-        raise ValueError("Unsupported file type. Only PDF and DOCX are supported.")
+load_dotenv()
+EMBEDDING_MODEL = os.getenv("TEXT_EMBEDDING_ID")
+IMAGE_EMBEDDING_MODEL = os.getenv("CLIP_MODEL")
 
-def _extract_text_from_pdf_bytes(b: bytes) -> str:
-    text_parts = []
-    with fitz.open(stream=b, filetype="pdf") as doc:
-        for page in doc:
-            text = page.get_text("text")
-            if text:
-                text_parts.append(text)
-    return "\n\n".join(text_parts)
 
-def _extract_text_from_docx_bytes(b: bytes) -> str:
-    bio = io.BytesIO(b)
-    doc = docx.Document(bio)
-    paragraphs = [p.text for p in doc.paragraphs if p.text and p.text.strip()]
-    return "\n\n".join(paragraphs)
+clip_model = CLIPModel.from_pretrained(IMAGE_EMBEDDING_MODEL)
+clip_processor = CLIPProcessor.from_pretrained(IMAGE_EMBEDDING_MODEL) # type    : ignore
+
+
+def chunk_text_and_generate_embeddings(docs):
+    
+    embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL)
+    
+    text_splitter = SemanticChunker(
+        embeddings=embeddings
+    )
+    doc = text_splitter.split_documents(docs)
+    return doc, embeddings
+
+def get_image_embeddings(image):
+    inputs = clip_processor(images=image, return_tensors="pt")
+    
+    # Generate the embedding vector
+    with torch.no_grad():
+        image_features = clip_model.get_image_features(pixel_values=inputs['pixel_values'])
+    
+
+    embedding = image_features.cpu().numpy().tolist()[0]
+    return embedding
+
+
+# def rules_storage(doc, embeddings):
+#     docs = file_loader(doc)
+#     chunks = chunk_data(doc)
+    
+    
