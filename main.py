@@ -1,25 +1,35 @@
 from fastapi import FastAPI, UploadFile, File
-from app.llm import check_novelty,check_compliance,final_evaluation
+from typing import Dict
+import tempfile
+import os
+from app.llm import check_novelty, check_compliance, final_evaluation
+from scripts.doc_extractor import extract_text_images_tables
 
 
 app = FastAPI(title="NaCCER Auto-Evaluation")
 
-def extract_text_from_file_content(content):
-    pass
 
 @app.post("/evaluate")
-async def evaluate(file: UploadFile = File(...)):
-    content = await file.read() #loads the entire file as a raw byte string
+async def evaluate(file: UploadFile = File(...)) -> Dict[str, str]:
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
+        content = await file.read()
+        tmp_file.write(content)
+        tmp_file_path = tmp_file.name
 
-    text=extract_text_from_file_content(content)
+    try:
+        doc_list = extract_text_images_tables(tmp_file_path)
+        proposal_text = doc_list[0].page_content
 
-    """
-    Here add code to run novelty assessment,S&tguidelines assessment and evaluation
+        novelty_res = await check_novelty(proposal_text)
+        compliance_res = await check_compliance(proposal_text)
+        final_res = await final_evaluation(proposal_text, novelty_res, compliance_res)
 
-    and return  {
-        "novelty_assessment": novelty_res,
-        "s_and_t_assessment": compliance_res,
-        "evaluation": final_res
-    }
+        return {
+            "novelty_assessment": novelty_res,
+            "s_and_t_assessment": compliance_res,
+            "evaluation": final_res
+        }
 
-    """
+    finally:
+        if os.path.exists(tmp_file_path):
+            os.remove(tmp_file_path)

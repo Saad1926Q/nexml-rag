@@ -1,3 +1,4 @@
+from typing import Dict, Any, List
 from langchain_community.document_loaders import UnstructuredFileLoader
 from langchain_experimental.text_splitter import SemanticChunker
 from langchain_huggingface import HuggingFaceEmbeddings
@@ -27,14 +28,34 @@ def chunk_text_and_generate_embeddings(docs):
 
 def get_image_embeddings(image):
     inputs = clip_processor(images=image, return_tensors="pt")
-    
+
     # Generate the embedding vector
     with torch.no_grad():
         image_features = clip_model.get_image_features(pixel_values=inputs['pixel_values'])
-    
+
 
     embedding = image_features.cpu().numpy().tolist()[0]
     return embedding
+
+
+def query_collection(collection: Any, query_embedding: List[float], n_results: int = 5) -> Dict[str, Any]:
+    """
+    Query a ChromaDB collection with an embedding vector.
+
+    Args:
+        collection: ChromaDB collection to query
+        query_embedding: Embedding vector for the query
+        n_results: Number of results to return (default: 5)
+
+    Returns:
+        Dictionary containing query results with documents, metadatas, and distances
+    """
+    results = collection.query(
+        query_embeddings=[query_embedding],
+        n_results=n_results,
+        include=["documents", "metadatas", "distances"]
+    )
+    return results
 
 
 # def rules_storage(doc, embeddings):

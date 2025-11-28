@@ -1,10 +1,14 @@
+import sys
 import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+
 from dotenv import load_dotenv
 from langchain_core.prompts import PromptTemplate
 from langchain_groq import ChatGroq
 from langchain_core.documents import Document
 from app.vector_db import proposals_collection, guidelines_collection
-from utils.utils import chunk_text_and_generate_embeddings
+from utils.utils import chunk_text_and_generate_embeddings, query_collection
 
 load_dotenv()
 
@@ -16,7 +20,7 @@ llm = ChatGroq(
 )
 
 
-async def check_novelty(proposal_text):
+async def check_novelty(proposal_text: str) -> str:
     """
     Check novelty of a proposal by comparing with similar past proposals.
     """
@@ -24,11 +28,9 @@ async def check_novelty(proposal_text):
     _, embeddings_model = chunk_text_and_generate_embeddings([proposal_doc])
     query_embedding = embeddings_model.embed_query(proposal_text)
 
-    results = proposals_collection.query(
-        query_embeddings=[query_embedding],
-        n_results=5,
-        include=["documents", "metadatas", "distances"]
-    )
+    print("Embedding type:", type(query_embedding))
+
+    results = query_collection(proposals_collection, query_embedding, n_results=5)
 
     context_text = ""
     for i in range(len(results['documents'][0])):
@@ -78,7 +80,7 @@ Provide your analysis covering:
     return response.content
 
 
-async def check_compliance(proposal_text):
+async def check_compliance(proposal_text: str) -> str:
     """
     Check compliance of a proposal with S&T guidelines.
     """
@@ -87,11 +89,7 @@ async def check_compliance(proposal_text):
     _, embeddings_model = chunk_text_and_generate_embeddings([proposal_doc])
     query_embedding = embeddings_model.embed_query(proposal_text)
 
-    results = guidelines_collection.query(
-        query_embeddings=[query_embedding],
-        n_results=5,
-        include=["documents", "metadatas", "distances"]
-    )
+    results = query_collection(guidelines_collection, query_embedding, n_results=5)
 
     context_text = ""
     for i in range(len(results['documents'][0])):
@@ -139,5 +137,50 @@ Provide your analysis covering:
 
     return response.content
 
-async def final_evaluation(proposal_text, novelty, compliance):
+async def final_evaluation(proposal_text: str, novelty: str, compliance: str) -> str:
+    """
+    Perform detailed evaluation of a proposal based on novelty and compliance assessments.
+    """
+
+    evaluation_prompt = PromptTemplate(
+        template="""You are an expert research evaluator for NACCER.
+
+Your task is to carry out a DETAILED EVALUATION of the following research proposal.
+
+**CURRENT PROPOSAL:**
+{proposal}
+
+**NOVELTY ASSESSMENT:**
+{novelty}
+
+**COMPLIANCE WITH S&T GUIDELINES:**
+{compliance}
+
+**INSTRUCTIONS:**
+Based on the proposal, novelty assessment, and compliance analysis above, evaluate the proposal on the following aspects. For each aspect, provide a score out of 10 along with detailed reasoning.
+
+Evaluate on these aspects:
+1. **Budget** - Appropriateness and justification of budget allocation
+2. **Technical Novelty** - Originality and innovation of the proposed research
+3. **Technical Feasibility** - Practicality and achievability of the proposed methods
+4. **Expertise** - Qualifications and capability of the research team
+5. **Compliance with Guidelines** - Adherence to S&T guidelines and requirements
+6. **Industry Relevance** - Practical applications and industrial impact
+7. **Scalability** - Potential for scaling the solution
+8. **Sustainability** - Long-term viability and environmental considerations
+9. **Impact** - Overall potential impact on the field and society
+
+For each aspect, provide:
+- Score (X/10)
+- Detailed reasoning
+
+Finally, provide:
+- **Overall Final Score** (Average of all aspects)
+- **Summary** of the proposal's strengths and weaknesses
+
+**YOUR DETAILED EVALUATION:**
+""",
+        input_variables=['proposal', 'novelty', 'compliance']
+    )
+
     pass
