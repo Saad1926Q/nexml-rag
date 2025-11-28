@@ -37,12 +37,7 @@ async def check_novelty(proposal_text: str) -> str:
 
     print("Embedding type:", type(query_embedding))
 
-    results = query_collection(
-    collection=proposals_collection, 
-    query_embedding=query_embedding, 
-    query_text=proposal_text,  
-    n_results=5
-    )
+    results = query_collection(proposals_collection, query_embedding, proposal_text, n_results=5)
 
     context_text = ""
     for i in range(len(results['documents'][0])):
@@ -82,12 +77,7 @@ async def check_compliance(proposal_text: str) -> str:
     _, embeddings_model = chunk_text_and_generate_embeddings([proposal_doc])
     query_embedding = embeddings_model.embed_query(proposal_text)
 
-    results = query_collection(
-    collection=guidelines_collection, 
-    query_embedding=query_embedding, 
-    query_text=proposal_text, 
-    n_results=5
-    )
+    results = query_collection(guidelines_collection, query_embedding, proposal_text, n_results=5)
 
     context_text = ""
     for i in range(len(results['documents'][0])):
