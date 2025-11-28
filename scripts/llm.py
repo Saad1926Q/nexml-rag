@@ -3,18 +3,22 @@ from scripts.guidelines_collection import GROQ_API_KEY, vectorstore
 from langchain_core.prompts import PromptTemplate
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
+from utils.utils import smart_search
 
 load_dotenv()
 GROQ_API_KEY = os.getenv('GROQ_API_KEY')
 
-retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 4})
+#retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 4})
 llm = ChatGroq(
     groq_api_key=GROQ_API_KEY,
     model_name="llama-3.1-8b-instant",
     max_tokens=4096
 )
 question = "tell me about the budget allocation guidelines or something related to the s and t guideleines "
-retriever_docs = retriever.invoke(question)
+#retriever_docs = retriever.invoke(question)
+
+# This looks at 20 docs, reranks them, and gives you the best 4
+retriever_docs = smart_search(vectorstore=vectorstore, query=question, top_k=4)
 context_text = "\n\n".join(doc.page_content for doc in retriever_docs)
 
 
@@ -26,7 +30,7 @@ prompt = PromptTemplate(
 
       {context}
       Question: {question}
-    """,
+    """,  
     input_variables = ['context', 'question']
 )
 final_prompt = prompt.invoke({"context": context_text, "question": question})

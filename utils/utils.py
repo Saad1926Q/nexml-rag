@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 import os
 from transformers import CLIPProcessor, CLIPModel
 import torch
+from sentence_transformers import CrossEncoder  
+from langchain_core.documents import Document
 
 load_dotenv()
 EMBEDDING_MODEL = os.getenv("TEXT_EMBEDDING_ID")
@@ -14,6 +16,9 @@ IMAGE_EMBEDDING_MODEL = os.getenv("CLIP_MODEL")
 
 clip_model = CLIPModel.from_pretrained(IMAGE_EMBEDDING_MODEL)
 clip_processor = CLIPProcessor.from_pretrained(IMAGE_EMBEDDING_MODEL) 
+
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+reranker_model = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2', device=device) 
 
 
 def chunk_text_and_generate_embeddings(docs):
@@ -56,6 +61,38 @@ def query_collection(collection: Any, query_embedding: List[float], n_results: i
         include=["documents", "metadatas", "distances"]
     )
     return results
+
+
+def smart_search(vectorstore, query: str, top_k: int = 5, fetch_k: int = 20) -> List[Document]:
+    """
+    Performs 'Rank CoT' retrieval: 
+    1. Fetches a broad set of documents (fetch_k) using the vectorstore.
+    2. Reranks them using the CrossEncoder.
+    3. Returns the top_k most relevant Documents.
+    
+    Use this in llm.py instead of retriever.invoke()
+    """
+    
+    initial_docs = vectorstore.similarity_search(query, k=fetch_k)
+    
+    if not initial_docs:
+        return []
+
+   
+    pairs = [[query, doc.page_content] for doc in initial_docs]
+ 
+    scores = reranker_model.predict(pairs)
+    
+    ranked_docs = sorted(zip(initial_docs, scores), key=lambda x: x[1], reverse=True)
+    
+    # 5. Extract top_k
+    final_docs = []
+    for doc, score in ranked_docs[:top_k]:
+        # Optional: Save score to metadata for debugging
+        doc.metadata['relevance_score'] = float(score)
+        final_docs.append(doc)
+        
+    return final_docs
 
 
 # def rules_storage(doc, embeddings):
