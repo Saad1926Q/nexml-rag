@@ -1,4 +1,3 @@
-# scripts/cli_chat.py
 """
 Terminal (CLI) chat for ephemeral proposal QA.
 
@@ -34,7 +33,7 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 if not GROQ_API_KEY:
     raise RuntimeError("GROQ_API_KEY not set in environment. Set it in .env")
 
-# Configure LLM (same as your other scripts)
+
 llm = ChatGroq(
     groq_api_key=GROQ_API_KEY,
     model_name="llama-3.1-8b-instant",
@@ -70,12 +69,12 @@ def safe_input(prompt_text: str) -> Optional[str]:
 
 
 def embed_query_threadsafe(embeddings_model, text):
-    # embeddings_model.embed_query is likely blocking; run in thread wrapper when needed
+    
     return embeddings_model.embed_query(text)
 
 
 def llm_invoke_threadsafe(prompt_text: str):
-    # llm.invoke is likely blocking; run in a background thread when called via asyncio.to_thread
+    
     return llm.invoke(prompt_text)
 
 
@@ -104,11 +103,11 @@ def interactive_loop(session_id: str):
                 print("Ending session...")
                 break
 
-            # 1) embed query (blocking) — run in a thread
+            
             query_embedding = asyncio.run(asyncio.to_thread(embed_query_threadsafe, embeddings_model, q))
 
-            # 2) query collection + rerank (blocking) — run in thread
-            results = asyncio.run(asyncio.to_thread(query_collection, collection, query_embedding, q, 5))
+            
+            results = asyncio.run(asyncio.to_thread(query_collection, collection, query_embedding, 5))
 
             docs = results.get("documents", [[]])[0]
             if docs:
@@ -118,7 +117,7 @@ def interactive_loop(session_id: str):
 
             final_prompt = build_answer_prompt(context_text, q)
 
-            # 3) call llm (blocking) run in thread
+            
             llm_response = asyncio.run(asyncio.to_thread(llm_invoke_threadsafe, final_prompt))
             answer = getattr(llm_response, "content", str(llm_response)).strip()
 
@@ -149,10 +148,9 @@ def main():
         print("ERROR: PDF path does not exist:", pdf_path)
         sys.exit(1)
 
-    # Extract text
+    
     print("Extracting proposal text from PDF...")
     docs = extract_text_images_tables(pdf_path)
-    # extract_text_images_tables returns a list of Document objects in your repo
     if isinstance(docs, tuple):
         doc_list = docs[0]
     else:
@@ -164,7 +162,7 @@ def main():
 
     proposal_doc = doc_list[0]
 
-    # Create ephemeral session
+    
     print("Creating ephemeral session and uploading chunks...")
     session_info = create_session_with_document(proposal_doc)
     session_id = session_info["session_id"]
@@ -172,9 +170,112 @@ def main():
 
     print(f"Session created: {session_id} (chunks added: {chunks_added})")
 
-    # Enter interactive loop
+    
     interactive_loop(session_id)
 
 
 if __name__ == "__main__":
     main()
+
+
+# # cli_chat.py
+# import argparse
+# import asyncio
+# import os
+# import sys
+# from dotenv import load_dotenv
+# load_dotenv()
+
+# try:
+#     from app.talk_to_proposal import create_session_from_pdf_path, get_session, end_session, build_answer_prompt, LLM
+    
+# except Exception as e:
+#     print("Error importing from app.py:", e)
+#     sys.exit(1)
+
+# def safe_input(prompt_text: str):
+#     try:
+#         return input(prompt_text)
+#     except (EOFError, KeyboardInterrupt):
+#         return None
+
+# def embed_query_sync(embeddings_model, text):
+#     return embeddings_model.embed_query(text)
+
+# def llm_invoke_sync(prompt_text):
+#     # call LLM synchronously (blocking) — will be run in thread
+#     if LLM is None:
+#         return None
+#     return LLM.invoke(prompt_text)
+
+# def interactive_loop(session_id):
+#     session = get_session(session_id)
+#     if not session:
+#         print("Session not found.")
+#         return
+#     embeddings_model = session["embeddings_model"]
+#     collection = session["collection"]
+
+#     print("\nChat ready. Type questions and press Enter.")
+#     print("Type 'exit' to finish and delete ephemeral session.\n")
+#     try:
+#         while True:
+#             q = safe_input("Question> ")
+#             if q is None:
+#                 print("\n(Interrupted)")
+#                 break
+#             q = q.strip()
+#             if not q:
+#                 continue
+#             if q.lower() in ("exit", "quit"):
+#                 print("Ending session...")
+#                 break
+
+#             # embed query
+#             query_embedding = asyncio.run(asyncio.to_thread(embed_query_sync, embeddings_model, q))
+
+#             # query collection
+#             results = collection.query(query_embeddings=[query_embedding], n_results=5, include=["documents"])
+#             docs = results.get("documents", [[]])[0]
+#             context = "\n\n---\n\n".join(docs) if docs else ""
+
+#             final_prompt = build_answer_prompt(context, q)
+
+#             if LLM is None:
+#                 print("LLM not configured. Set GROQ_API_KEY in .env to enable LLM responses.")
+#                 continue
+
+#             llm_resp = asyncio.run(asyncio.to_thread(llm_invoke_sync, final_prompt))
+#             answer = getattr(llm_resp, "content", str(llm_resp)).strip()
+#             print("\nAnswer:\n")
+#             print(answer)
+#             print("\n" + ("-"*60) + "\n")
+#     except KeyboardInterrupt:
+#         print("\nInterrupted by user.")
+#     finally:
+#         try:
+#             ok = end_session(session_id)
+#             if ok:
+#                 print(f"Session {session_id} deleted.")
+#             else:
+#                 print(f"Could not delete session {session_id}.")
+#         except Exception as e:
+#             print("Error ending session:", e)
+
+# def main():
+#     parser = argparse.ArgumentParser(description="CLI ephemeral proposal chat")
+#     parser.add_argument("--pdf", required=True, help="Path to proposal PDF")
+#     args = parser.parse_args()
+#     pdf_path = args.pdf
+#     if not os.path.exists(pdf_path):
+#         print("PDF path does not exist:", pdf_path)
+#         return
+
+#     print("Creating ephemeral session from PDF (this may take a moment)...")
+#     info = create_session_from_pdf_path(pdf_path)
+#     session_id = info["session_id"]
+#     print(f"Session created: {session_id} (chunks: {info.get('chunks_added',0)})")
+#     interactive_loop(session_id)
+
+# if __name__ == "__main__":
+#     main()
