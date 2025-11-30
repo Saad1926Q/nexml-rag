@@ -19,37 +19,37 @@ vectorstore = Chroma.from_documents(text_emb,
                                     
                                     persist_directory=persist_directory)
 
+# TODO: Images Part
+# count = vectorstore._collection.count()
+# print(f"Total items in collection: {count} (Text chunks)")
+# image_ids = []
+# image_embeddings_list = []
+# image_metadatas = []
 
-count = vectorstore._collection.count()
-print(f"Total items in collection: {count} (Text chunks)")
-image_ids = []
-image_embeddings_list = []
-image_metadatas = []
+# for item in img_emb:
 
-for item in img_emb:
-
-    img_metadata = item['metadata']
-    unique_id = f"{img_metadata['source']}_img_{img_metadata['image_index']}"
+#     img_metadata = item['metadata']
+#     unique_id = f"{img_metadata['source']}_img_{img_metadata['image_index']}"
     
-    image_ids.append(unique_id)
-    image_embeddings_list.append(item['embedding'])
-    image_metadatas.append(img_metadata)
+#     image_ids.append(unique_id)
+#     image_embeddings_list.append(item['embedding'])
+#     image_metadatas.append(img_metadata)
 
 
 
-print(f"Adding {len(image_embeddings_list)} image embeddings to the Chroma collection...")
-collection = vectorstore._collection
+# print(f"Adding {len(image_embeddings_list)} image embeddings to the Chroma collection...")
+# collection = vectorstore._collection
 
-collection.add(
-    ids=image_ids,
-    embeddings=image_embeddings_list,
-    metadatas=image_metadatas
-)
+# collection.add(
+#     ids=image_ids,
+#     embeddings=image_embeddings_list,
+#     metadatas=image_metadatas
+# )
 
-print("Image embeddings successfully added to the Chroma collection.")
+# print("Image embeddings successfully added to the Chroma collection.")
 
-count = vectorstore._collection.count()
-print(f"Total items in collection: {count} (Text chunks + Images)")
+# count = vectorstore._collection.count()
+# print(f"Total items in collection: {count} (Text chunks + Images)")
 
 
 

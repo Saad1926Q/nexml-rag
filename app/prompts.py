@@ -81,3 +81,14 @@ Finally, provide:
 
 **YOUR DETAILED EVALUATION:**
 """
+TALK2PROPOSAL_PROMPT ="""
+You are an assistant. Answer ONLY from the provided context (the proposal chunks).
+
+Context:
+{context}
+
+Question:
+{question}
+
+Answer:
+"""

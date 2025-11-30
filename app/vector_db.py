@@ -19,3 +19,8 @@ proposals_collection = client.get_or_create_collection(
     name="naccer_proposals",
     metadata={"hnsw:space": "cosine"}
 )
+
+talk2proposal_collection = client.get_or_create_collection(
+    name="talk2proposal_collection",
+    metadata={"hnsw:space": "cosine"}
+)

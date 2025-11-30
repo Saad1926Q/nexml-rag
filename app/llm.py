@@ -13,15 +13,16 @@ from app.vector_db import proposals_collection, guidelines_collection
 from app.prompts import (
     NOVELTY_ANALYSIS_PROMPT,
     COMPLIANCE_CHECK_PROMPT,
-    FINAL_EVALUATION_PROMPT
+    FINAL_EVALUATION_PROMPT,
+    TALK2PROPOSAL_PROMPT
 )
 from utils.utils import chunk_text_and_generate_embeddings, query_collection
 
 
 
-GROQ_API_KEY = os.getenv('GROQ_API_KEY')
+# GROQ_API_KEY = os.getenv('GROQ_API_KEY')
 llm = ChatGroq(
-    groq_api_key=GROQ_API_KEY,
+    # groq_api_key=GROQ_API_KEY,
     model_name="llama-3.1-8b-instant",
     max_tokens=4096
 )
@@ -128,3 +129,7 @@ async def final_evaluation(proposal_text: str, novelty: str, compliance: str) ->
     response = llm.invoke(final_prompt)
     
     return response.content
+
+
+
+
