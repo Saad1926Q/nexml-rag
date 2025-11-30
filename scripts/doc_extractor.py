@@ -18,7 +18,7 @@ def extract_text_images_tables(file_path):
     doc = result.document
     text = doc.export_to_markdown() #str
 
-
+    
     # TODO: Implement image handling later
     # image_embedings = []
     # for i, pic in enumerate(doc.pictures):
@@ -42,5 +42,5 @@ def extract_text_images_tables(file_path):
     doc = Document(page_content = text,
                    metadata = {'source': file_path})
     doc_list = [doc]
-    return doc_list
+    return doc_list,None
 
