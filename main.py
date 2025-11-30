@@ -4,9 +4,12 @@ import tempfile
 import os
 from app.llm import check_novelty, check_compliance, final_evaluation
 from scripts.doc_extractor import extract_text_images_tables
+import asyncio
 
+from app.talk import router as talk_router, start_cleanup_background_task, stop_cleanup_background_task
 
 app = FastAPI(title="NaCCER Auto-Evaluation")
+app.include_router(talk_router, prefix="/talk")
 
 
 @app.post("/evaluate")
@@ -33,3 +36,13 @@ async def evaluate(file: UploadFile = File(...)) -> Dict[str, str]:
     finally:
         if os.path.exists(tmp_file_path):
             os.remove(tmp_file_path)
+
+@app.on_event("startup")
+async def on_startup():
+    loop = asyncio.get_event_loop()
+    start_cleanup_background_task(loop)
+
+
+@app.on_event("shutdown")
+async def on_shutdown():
+    stop_cleanup_background_task()
