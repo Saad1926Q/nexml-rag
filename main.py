@@ -2,18 +2,12 @@ from fastapi import FastAPI, UploadFile, File, status
 from typing import Dict
 import tempfile
 import os
-from app.llm import check_novelty, check_compliance, final_evaluation
-from scripts import talk2proposal
+from app.llm import check_novelty, check_compliance, final_evaluation, talk2proposal
 from scripts.doc_extractor import extract_text_images_tables
-import asyncio
 from fastapi.responses import JSONResponse
-
-from app.talk import router as talk_router, start_cleanup_background_task, stop_cleanup_background_task
-from utils.utils import talk2proposal_collection
+from utils.utils import store_proposal_for_chat
 
 app = FastAPI(title="NaCCER Auto-Evaluation")
-app.include_router(talk_router, prefix="/talk")
-
 
 @app.post("/evaluate")
 async def evaluate(file: UploadFile = File(...)) -> Dict[str, str]:
@@ -41,15 +35,15 @@ async def evaluate(file: UploadFile = File(...)) -> Dict[str, str]:
             os.remove(tmp_file_path)
 
 
-@app.post("/upload_talk2proposal")
-async def evaluate(file: UploadFile = File(...)) -> JSONResponse:
+@app.post("/upload_proposal")
+async def upload(file: UploadFile = File(...)) -> JSONResponse:
     with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
         content = await file.read()
         tmp_file.write(content)
         tmp_file_path = tmp_file.name
 
     try:
-        talk2proposal_collection(tmp_file_path)
+        store_proposal_for_chat(tmp_file_path)
         
         return JSONResponse(status_code=status.HTTP_200_OK, content={"message": "Resource created successfully!"})
 
@@ -58,16 +52,11 @@ async def evaluate(file: UploadFile = File(...)) -> JSONResponse:
             os.remove(tmp_file_path)
 
 
-@app.post("/talk2proposal_chat")
-async def chat(question: str) -> str:
-    vectore
+@app.post("/talk2proposal")
+async def chat(question: str) -> Dict[str, str]:
+    """
+    Answer questions about uploaded proposals using RAG.
+    """
+    answer = await talk2proposal(question)
+    return {"answer": answer}
     
-@app.on_event("startup")
-async def on_startup():
-    loop = asyncio.get_event_loop()
-    start_cleanup_background_task(loop)
-
-
-@app.on_event("shutdown")
-async def on_shutdown():
-    stop_cleanup_background_task()

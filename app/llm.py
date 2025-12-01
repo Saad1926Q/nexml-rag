@@ -9,7 +9,7 @@ load_dotenv()
 from langchain_core.prompts import PromptTemplate
 from langchain_groq import ChatGroq
 from langchain_core.documents import Document
-from app.vector_db import proposals_collection, guidelines_collection
+from app.vector_db import proposals_collection, guidelines_collection, talk2proposal_collection
 from app.prompts import (
     NOVELTY_ANALYSIS_PROMPT,
     COMPLIANCE_CHECK_PROMPT,
@@ -20,9 +20,9 @@ from utils.utils import chunk_text_and_generate_embeddings, query_collection
 
 
 
-# GROQ_API_KEY = os.getenv('GROQ_API_KEY')
+GROQ_API_KEY = os.getenv('GROQ_API_KEY')
 llm = ChatGroq(
-    # groq_api_key=GROQ_API_KEY,
+    groq_api_key=GROQ_API_KEY,
     model_name="llama-3.1-8b-instant",
     max_tokens=4096
 )
@@ -125,9 +125,43 @@ async def final_evaluation(proposal_text: str, novelty: str, compliance: str) ->
         "compliance": compliance
     })
 
-    
+
     response = llm.invoke(final_prompt)
-    
+
+    return response.content
+
+
+#TODO: Make it have memory of prev conv
+async def talk2proposal(question: str) -> str:
+    """
+    Answer questions about a proposal by retrieving relevant chunks and using LLM.
+    """
+    question_doc = Document(page_content=question)
+    _, embeddings_model = chunk_text_and_generate_embeddings([question_doc])
+    query_embedding = embeddings_model.embed_query(question)
+
+    results = query_collection(talk2proposal_collection, query_embedding, question, n_results=5)
+
+    context_text = ""
+    for i in range(len(results['documents'][0])):
+        doc_text = results['documents'][0][i]
+        context_text += f"\n{'='*80}\n"
+        context_text += f"Chunk {i+1}:\n"
+        context_text += f"{doc_text}\n"
+        context_text += f"{'='*80}\n"
+
+    talk2proposal_prompt = PromptTemplate(
+        template=TALK2PROPOSAL_PROMPT,
+        input_variables=['question', 'context']
+    )
+
+    final_prompt = talk2proposal_prompt.invoke({
+        "question": question,
+        "context": context_text
+    })
+
+    response = llm.invoke(final_prompt)
+
     return response.content
 
 

@@ -1,280 +1,62 @@
-# """
-# Terminal (CLI) chat for ephemeral proposal QA.
-
-# Usage:
-#     python scripts/cli_chat.py --pdf /path/to/proposal.pdf
-
-# Behaviour:
-#  - Creates an ephemeral collection (session_id)
-#  - Adds the proposal chunks to the collection
-#  - Lets you type questions in terminal, gets answers from the LLM grounded
-#    in the ephemeral collection contents.
-#  - Type 'exit' or Ctrl+C to finish; the script will delete the ephemeral collection.
-# """
-
-# import argparse
-# import asyncio
-# import signal
-# import sys
-# from typing import Optional
-
-# from langchain_core.prompts import PromptTemplate
-# from langchain_groq import ChatGroq
-# from dotenv import load_dotenv
-
-# from scripts.doc_extractor import extract_text_images_tables
-# from app.session_manager import create_session_with_document, get_session, end_session
-# from utils.utils import chunk_text_and_generate_embeddings, query_collection
-
-# import os
-# load_dotenv()
-
-# GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-# if not GROQ_API_KEY:
-#     raise RuntimeError("GROQ_API_KEY not set in environment. Set it in .env")
-
-
-# llm = ChatGroq(
-#     groq_api_key=GROQ_API_KEY,
-#     model_name="llama-3.1-8b-instant",
-#     max_tokens=2048
-# )
-
-
-# def build_answer_prompt(context: str, question: str) -> str:
-#     prompt_template = PromptTemplate(
-#         template="""
-# You are an assistant that answers questions using ONLY the provided context excerpts from a single proposal. 
-# If the context does not contain the answer, reply exactly: "I don't know (not in the proposal)."
-
-# Context:
-# {context}
-
-# Question: {question}
-
-# Answer (concise, grounded in context):
-# """,
-#         input_variables=["context", "question"]
-#     )
-#     return prompt_template.invoke({"context": context, "question": question})
-
-
-# def safe_input(prompt_text: str) -> Optional[str]:
-#     try:
-#         return input(prompt_text)
-#     except EOFError:
-#         return None
-#     except KeyboardInterrupt:
-#         return None
-
-
-# def embed_query_threadsafe(embeddings_model, text):
-    
-#     return embeddings_model.embed_query(text)
-
-
-# def llm_invoke_threadsafe(prompt_text: str):
-    
-#     return llm.invoke(prompt_text)
-
-
-# def interactive_loop(session_id: str):
-#     session = get_session(session_id)
-#     if not session:
-#         print("Session not found. Exiting.")
-#         return
-
-#     embeddings_model = session["embeddings_model"]
-#     collection = session["collection"]
-
-#     print("\nChat ready. Type questions and press Enter.")
-#     print("Type 'exit' (without quotes) to finish and delete ephemeral session.\n")
-
-#     try:
-#         while True:
-#             q = safe_input("Question> ")
-#             if q is None:
-#                 print("\n(EOF/interrupt received)")
-#                 break
-#             q = q.strip()
-#             if not q:
-#                 continue
-#             if q.lower() in ("exit", "quit"):
-#                 print("Ending session...")
-#                 break
-
-            
-#             query_embedding = asyncio.run(asyncio.to_thread(embed_query_threadsafe, embeddings_model, q))
-
-            
-#             results = asyncio.run(asyncio.to_thread(query_collection, collection, query_embedding, 5))
-
-#             docs = results.get("documents", [[]])[0]
-#             if docs:
-#                 context_text = "\n\n---\n\n".join(docs)
-#             else:
-#                 context_text = ""
-
-#             final_prompt = build_answer_prompt(context_text, q)
-
-            
-#             llm_response = asyncio.run(asyncio.to_thread(llm_invoke_threadsafe, final_prompt))
-#             answer = getattr(llm_response, "content", str(llm_response)).strip()
-
-#             print("\nAnswer:\n")
-#             print(answer)
-#             print("\n" + ("-" * 60) + "\n")
-
-#     except KeyboardInterrupt:
-#         print("\nInterrupted by user, ending session.")
-#     finally:
-#         try:
-#             ended = end_session(session_id)
-#             if ended:
-#                 print(f"Ephemeral session {session_id} deleted.")
-#             else:
-#                 print(f"Could not delete ephemeral session {session_id} (may have been removed).")
-#         except Exception as e:
-#             print("Error while ending session:", e)
-
-
-# def main():
-#     parser = argparse.ArgumentParser(description="CLI ephemeral proposal chat")
-#     parser.add_argument("--pdf", required=True, help="Path to proposal PDF")
-#     args = parser.parse_args()
-
-#     pdf_path = args.pdf
-#     if not os.path.exists(pdf_path):
-#         print("ERROR: PDF path does not exist:", pdf_path)
-#         sys.exit(1)
-
-    
-#     print("Extracting proposal text from PDF...")
-#     docs = extract_text_images_tables(pdf_path)
-#     if isinstance(docs, tuple):
-#         doc_list = docs[0]
-#     else:
-#         doc_list = docs
-
-#     if not doc_list:
-#         print("Failed to extract proposal from PDF.")
-#         sys.exit(1)
-
-#     proposal_doc = doc_list[0]
-
-    
-#     print("Creating ephemeral session and uploading chunks...")
-#     session_info = create_session_with_document(proposal_doc)
-#     session_id = session_info["session_id"]
-#     chunks_added = session_info.get("chunks_added", 0)
-
-#     print(f"Session created: {session_id} (chunks added: {chunks_added})")
-
-    
-#     interactive_loop(session_id)
-
-
-# if __name__ == "__main__":
-#     main()
-
-
-# cli_chat.py
-import argparse
-import asyncio
 import os
 import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.utils import chunk_text_and_generate_embeddings
+from scripts.doc_extractor import extract_text_images_tables
+from langchain_community.vectorstores.utils import filter_complex_metadata
+from langchain_community.vectorstores import Chroma
+from langchain_groq import ChatGroq
+from langchain_core.prompts import PromptTemplate
 from dotenv import load_dotenv
+from app.prompts import TALK2PROPOSAL_PROMPT
+from collections import deque
 load_dotenv()
 
-try:
-    from app.talk_to_proposal import create_session_from_pdf_path, get_session, end_session, build_answer_prompt, LLM
+
+llm = ChatGroq(
+    model_name="llama-3.1-8b-instant",
+    max_tokens=4096
+)
+
+def talk2proposal(file_path: str):
+    text, img_emb = extract_text_images_tables(file_path=file_path)
+    text_emb, e= chunk_text_and_generate_embeddings(text)
+
+    persist_directory = "./ChromaDB"
+    text_emb = filter_complex_metadata(text_emb)
+    vectorstore = Chroma.from_documents(text_emb,
+                                        embedding=e,
+                                        collection_name="talk2proposal_collection",
+                                        
+                                        persist_directory=persist_directory)
     
-except Exception as e:
-    print("Error importing from app.py:", e)
-    sys.exit(1)
+    return vectorstore
 
-def safe_input(prompt_text: str):
-    try:
-        return input(prompt_text)
-    except (EOFError, KeyboardInterrupt):
-        return None
+vectorstore = talk2proposal('documents/NACCER_2023_RD_8968.pdf')
 
-def embed_query_sync(embeddings_model, text):
-    return embeddings_model.embed_query(text)
+#TODO: Make it have memory of prev conv
+while True:
+    retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 4})
+    question = input("Enter a question which you want to ask from the user regarding the research? ")
 
-def llm_invoke_sync(prompt_text):
-    if LLM is None:
-        return None
-    return LLM.invoke(prompt_text)
+    if question =='quit':
+        break
+    
+    retriever_docs = retriever.invoke(question)
+    context_text = "\n\n".join(doc.page_content for doc in retriever_docs)
 
-def interactive_loop(session_id):
-    session = get_session(session_id)
-    if not session:
-        print("Session not found.")
-        return
-    embeddings_model = session["embeddings_model"]
-    collection = session["collection"]
 
-    print("\nChat ready. Type questions and press Enter.")
-    print("Type 'exit' to finish and delete ephemeral session.\n")
-    try:
-        while True:
-            q = safe_input("Question> ")
-            if q is None:
-                print("\n(Interrupted)")
-                break
-            q = q.strip()
-            if not q:
-                continue
-            if q.lower() in ("exit", "quit"):
-                print("Ending session...")
-                break
+    prompt = PromptTemplate(
+        template=TALK2PROPOSAL_PROMPT,
+        input_variables = ['context', 'question']
+    )
+   
+    
+ 
+    final_prompt = prompt.invoke({"context": context_text, "question": question})
+    
+    answer = llm.invoke(final_prompt)
+    print(answer.content)
 
-            
-            query_embedding = asyncio.run(asyncio.to_thread(embed_query_sync, embeddings_model, q))
+    
 
-            
-            results = collection.query(query_embeddings=[query_embedding], n_results=5, include=["documents"])
-            docs = results.get("documents", [[]])[0]
-            context = "\n\n---\n\n".join(docs) if docs else ""
-
-            final_prompt = build_answer_prompt(context, q)
-
-            if LLM is None:
-                print("LLM not configured. Set GROQ_API_KEY in .env to enable LLM responses.")
-                continue
-
-            llm_resp = asyncio.run(asyncio.to_thread(llm_invoke_sync, final_prompt))
-            answer = getattr(llm_resp, "content", str(llm_resp)).strip()
-            print("\nAnswer:\n")
-            print(answer)
-            print("\n" + ("-"*60) + "\n")
-    except KeyboardInterrupt:
-        print("\nInterrupted by user.")
-    finally:
-        try:
-            ok = end_session(session_id)
-            if ok:
-                print(f"Session {session_id} deleted.")
-            else:
-                print(f"Could not delete session {session_id}.")
-        except Exception as e:
-            print("Error ending session:", e)
-
-def main():
-    parser = argparse.ArgumentParser(description="CLI ephemeral proposal chat")
-    parser.add_argument("--pdf", required=True, help="Path to proposal PDF")
-    args = parser.parse_args()
-    pdf_path = args.pdf
-    if not os.path.exists(pdf_path):
-        print("PDF path does not exist:", pdf_path)
-        return
-
-    print("Creating ephemeral session from PDF (this may take a moment)...")
-    info = create_session_from_pdf_path(pdf_path)
-    session_id = info["session_id"]
-    print(f"Session created: {session_id} (chunks: {info.get('chunks_added',0)})")
-    interactive_loop(session_id)
-
-if __name__ == "__main__":
-    main()

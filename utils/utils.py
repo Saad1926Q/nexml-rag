@@ -107,23 +107,32 @@ def query_collection(collection: Any, query_embedding: List[float], query_text: 
     return results
 
 
-def talk2proposal_vectorDB(file_path: str):
-    text, img_emb = extract_text_images_tables(file_path=file_path)
+def store_proposal_for_chat(file_path: str):
+    """
+    Process and store a proposal document in the talk2proposal collection.
+    Clears existing collection before adding new proposal.
+    """
+
+    existing_items = talk2proposal_collection.get()  # Get previously stored embeddings and their associate data from the talk2proposal_collection.
+    if existing_items['ids']:
+        talk2proposal_collection.delete(ids=existing_items['ids'])
+
+    text, _ = extract_text_images_tables(file_path=file_path)
     chunked_docs, embeddings_model = chunk_text_and_generate_embeddings(text)
 
-    
+
     ids = []
     documents = []
     metadatas = []
 
     for i, doc in enumerate(chunked_docs):
-        ids.append(f"guideline_{i}")
+        ids.append(f"proposal_chunk_{i}")
         documents.append(doc.page_content)
-        
+
 
     all_embeddings = embeddings_model.embed_documents([doc.page_content for doc in chunked_docs])
 
-    print("\nAdding guidelines to ChromaDB collection...")
+    print(f"\nAdding {len(chunked_docs)} proposal chunks to ChromaDB collection...")
     talk2proposal_collection.add(
         ids=ids,
         documents=documents,
@@ -134,29 +143,6 @@ def talk2proposal_vectorDB(file_path: str):
 
 
 
-#TODO: Make it have memory of prev conv
-vectorestore = talk2proposal('documents/NACCER_2023_RD_8968.pdf')
-def talk2proposal(question):
-    retriever = vectorestore.as_retriever(search_type="similarity", search_kwargs={"k": 4})
-    question = input("Enter a question which you want to ask from the user regarding the research? ")
-
-
-    
-    retriever_docs = retriever.invoke(question)
-    context_text = "\n\n".join(doc.page_content for doc in retriever_docs)
-
-
-    prompt = PromptTemplate(
-        template=TALK2PROPOSAL_PROMPT,
-        input_variables = ['context', 'question']
-    )
-   
-    
- 
-    final_prompt = prompt.invoke({"context": context_text, "question": question})
-    
-    answer = llm.invoke(final_prompt)
-    print(answer.content)
 
     
 

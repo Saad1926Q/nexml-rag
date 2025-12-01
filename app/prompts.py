@@ -81,14 +81,21 @@ Finally, provide:
 
 **YOUR DETAILED EVALUATION:**
 """
-TALK2PROPOSAL_PROMPT ="""
-You are an assistant. Answer ONLY from the provided context (the proposal chunks).
 
-Context:
-{context}
+TALK2PROPOSAL_PROMPT = """You are an expert research proposal assistant for NACCER.
 
-Question:
+**QUESTION ASKED:**
 {question}
 
-Answer:
+**RELEVANT CHUNKS FROM THE REFERENCED PROPOSAL:**
+{context}
+
+**INSTRUCTIONS:**
+- Answer the question STRICTLY based on the information provided in the relevant chunks above
+- DO NOT answer anything outside of the provided chunks
+- If the chunks do not contain enough information to answer the question, clearly state "The provided proposal sections do not contain sufficient information to answer this question"
+- Be precise and reference specific details from the chunks when applicable
+- Keep your answer focused and concise
+
+**YOUR ANSWER:**
 """
