@@ -72,7 +72,7 @@ print("\n" + "="*50)
 print("Processing Guidelines PDF...")
 print("="*50)
 
-guidlines_list = extract_text_images_tables("documents/S&T-Guidelines-MoC.pdf")
+guidlines_list,_ = extract_text_images_tables("documents/S&T-Guidelines-MoC.pdf")
 
 print("Chunking guidelines and generating embeddings...")
 chunked_docs, embeddings_model = chunk_text_and_generate_embeddings(guidlines_list)

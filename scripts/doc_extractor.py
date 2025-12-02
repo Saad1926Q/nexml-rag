@@ -11,6 +11,7 @@ pipeline_options = PdfPipelineOptions(
 )
 
 def extract_text_images_tables(file_path):
+    doc_list = []
     doc_converter = DocumentConverter(format_options={
                         InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)})
     result = doc_converter.convert(file_path)
@@ -40,6 +41,6 @@ def extract_text_images_tables(file_path):
 
     doc = Document(page_content = text,
                    metadata = {'source': file_path})
-    doc_list = [doc]
+    doc_list.append(doc)
     return doc_list,None
 

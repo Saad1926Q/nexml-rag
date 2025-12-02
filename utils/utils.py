@@ -11,11 +11,13 @@ from scripts.doc_extractor import extract_text_images_tables
 from langchain_community.vectorstores.utils import filter_complex_metadata
 from langchain_community.vectorstores import Chroma
 from app.vector_db import talk2proposal_collection
+from app.prompts import SCORE_PROMPT
 load_dotenv()
 EMBEDDING_MODEL = os.getenv("TEXT_EMBEDDING_ID")
 IMAGE_EMBEDDING_MODEL = os.getenv("CLIP_MODEL")
-
-
+from langchain_core.prompts import PromptTemplate
+from utils.schema import Score
+    
 clip_model = CLIPModel.from_pretrained(IMAGE_EMBEDDING_MODEL)
 clip_processor = CLIPProcessor.from_pretrained(IMAGE_EMBEDDING_MODEL)
 
@@ -141,12 +143,30 @@ def store_proposal_for_chat(file_path: str):
     
 
 
+def score(proposal_text, context_text, answer_text, llm):
+    score_llm = llm.with_structured_output(Score)
+    response_score = PromptTemplate(
+        template = SCORE_PROMPT,
+        input_variables = ['question', 'context', 'answer']
+    )
 
+    chain = response_score | score_llm 
+    score_result: Score = chain.invoke({
+    "question": proposal_text,
+    "context": context_text,
+    "answer": answer_text
+})
 
-
+    return score_result
     
 
 
+def save_file(content, filename):
+    os.makedirs('documents', exist_ok= True)
+    file_path = os.path.join('documents',"filename")
+    with open(file_path, "wb") as f:
+        f.write(content)
+    
 
 
 

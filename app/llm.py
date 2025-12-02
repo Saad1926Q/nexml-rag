@@ -14,21 +14,24 @@ from app.prompts import (
     NOVELTY_ANALYSIS_PROMPT,
     COMPLIANCE_CHECK_PROMPT,
     FINAL_EVALUATION_PROMPT,
+    SCORE_PROMPT,
     TALK2PROPOSAL_PROMPT
 )
-from utils.utils import chunk_text_and_generate_embeddings, query_collection
-
-
+from langchain_core.output_parsers import StrOutputParser
+from utils.utils import chunk_text_and_generate_embeddings, query_collection, score
+from utils.schema import Score
 
 GROQ_API_KEY = os.getenv('GROQ_API_KEY')
 llm = ChatGroq(
     groq_api_key=GROQ_API_KEY,
     model_name="llama-3.1-8b-instant",
-    max_tokens=4096
+    max_tokens=4096,
+    temperature= 0
 )
 
+parser = StrOutputParser()
 
-async def check_novelty(proposal_text: str) -> str:
+async def check_novelty(proposal_text: str) -> tuple[str,Score, set[str]]:
     """
     Check novelty of a proposal by comparing with similar past proposals.
     """
@@ -41,6 +44,7 @@ async def check_novelty(proposal_text: str) -> str:
     results = query_collection(proposals_collection, query_embedding, proposal_text, n_results=5)
 
     context_text = ""
+    p_id = set()
     for i in range(len(results['documents'][0])):
         doc_text = results['documents'][0][i]
         metadata = results['metadatas'][0][i]
@@ -54,22 +58,23 @@ async def check_novelty(proposal_text: str) -> str:
         context_text += f"\nContent:\n{doc_text}\n"
         context_text += f"{'='*80}\n"
 
+        p_id.add(metadata.get('proposal_id', 'N/A'))
     novelty_prompt = PromptTemplate(
         template=NOVELTY_ANALYSIS_PROMPT,
         input_variables=['proposal', 'context']
     )
-
-    final_prompt = novelty_prompt.invoke({
+    
+    chain = novelty_prompt | llm | parser
+    response = chain.invoke({
         "proposal": proposal_text,
         "context": context_text
     })
+    
+    response_score = score(proposal_text, context_text,response, llm)
+    return response, response_score, p_id
 
-    response = llm.invoke(final_prompt)
 
-    return response.content
-
-
-async def check_compliance(proposal_text: str) -> str:
+async def check_compliance(proposal_text: str) -> tuple[str,Score]:
     """
     Check compliance of a proposal with S&T guidelines.
     """
@@ -98,14 +103,15 @@ async def check_compliance(proposal_text: str) -> str:
         input_variables=['proposal', 'context']
     )
 
-    final_prompt = compliance_prompt.invoke({
+    chain = compliance_prompt | llm | parser
+    response = chain.invoke({
         "proposal": proposal_text,
         "context": context_text
     })
 
-    response = llm.invoke(final_prompt)
 
-    return response.content
+    compliance_score = score(proposal_text, context_text,response, llm)
+    return response, compliance_score
 
 async def final_evaluation(proposal_text: str, novelty: str, compliance: str) -> str:
     """
@@ -118,17 +124,15 @@ async def final_evaluation(proposal_text: str, novelty: str, compliance: str) ->
         input_variables=['proposal', 'novelty', 'compliance']
     )
 
-
-    final_prompt = evaluation_prompt.invoke({
+    chain = evaluation_prompt | llm | parser
+    response = chain.invoke({
         "proposal": proposal_text,
         "novelty": novelty,
         "compliance": compliance
     })
 
 
-    response = llm.invoke(final_prompt)
-
-    return response.content
+    return response
 
 
 #TODO: Make it have memory of prev conv
@@ -155,15 +159,13 @@ async def talk2proposal(question: str) -> str:
         input_variables=['question', 'context']
     )
 
-    final_prompt = talk2proposal_prompt.invoke({
+    chain = talk2proposal_prompt | llm | parser
+    response = chain.invoke({
         "question": question,
         "context": context_text
     })
 
-    response = llm.invoke(final_prompt)
-
-    return response.content
-
+    return response
 
 
 

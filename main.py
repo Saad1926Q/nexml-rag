@@ -1,16 +1,16 @@
 from fastapi import FastAPI, UploadFile, File, status
-from typing import Dict
+from typing import Any, Dict
 import tempfile
 import os
 from app.llm import check_novelty, check_compliance, final_evaluation, talk2proposal
 from scripts.doc_extractor import extract_text_images_tables
 from fastapi.responses import JSONResponse
-from utils.utils import store_proposal_for_chat
-
+from utils.utils import store_proposal_for_chat, save_file
+from utils.schema import Assessment, EvaluationResponse
 app = FastAPI(title="NaCCER Auto-Evaluation")
 
 @app.post("/evaluate")
-async def evaluate(file: UploadFile = File(...)) -> Dict[str, str]:
+async def evaluate(file: UploadFile = File(...)) -> EvaluationResponse:
     with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
         content = await file.read()
         tmp_file.write(content)
@@ -20,15 +20,22 @@ async def evaluate(file: UploadFile = File(...)) -> Dict[str, str]:
         doc_list = extract_text_images_tables(tmp_file_path)
         proposal_text = doc_list[0].page_content
         
-        novelty_res = await check_novelty(proposal_text)
-        compliance_res = await check_compliance(proposal_text)
+        novelty_res, novelty_score, p_id = await check_novelty(proposal_text)
+        compliance_res, compliance_score = await check_compliance(proposal_text)
         final_res = await final_evaluation(proposal_text, novelty_res, compliance_res)
 
-        return {
-            "novelty_assessment": novelty_res,
-            "s_and_t_assessment": compliance_res,
-            "evaluation": final_res
-        }
+        return EvaluationResponse(
+            novelty_assessment = Assessment(
+                summary= novelty_res,
+                score = novelty_score
+            ),
+            s_and_t_assessment = Assessment(
+                summary=compliance_res,
+                score = compliance_score
+            ),
+            evaluation = final_res,
+            proposal_ids = p_id
+        )
 
     finally:
         if os.path.exists(tmp_file_path):
@@ -52,6 +59,23 @@ async def upload(file: UploadFile = File(...)) -> JSONResponse:
             os.remove(tmp_file_path)
 
 
+#TODO: SAVING A NEW PROPOSAL TO DATABASE AND THEN TO VECTORDB / (SOME PART DONE)
+@app.post("/proposal_save")
+async def save_proposal(file: UploadFile = File(...)) -> JSONResponse:
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
+        content = await file.read()
+        tmp_file.write(content)
+        tmp_file_path = tmp_file.name
+
+    try:
+        save_file(content, tmp_file_path)
+        
+        return JSONResponse(status_code=status.HTTP_200_OK, content={"message": "Proposal saved successfully!"})
+
+    finally:
+        if os.path.exists(tmp_file_path):
+            os.remove(tmp_file_path)
+
 @app.post("/talk2proposal")
 async def chat(question: str) -> Dict[str, str]:
     """
@@ -60,3 +84,6 @@ async def chat(question: str) -> Dict[str, str]:
     answer = await talk2proposal(question)
     return {"answer": answer}
     
+# @app.post('/talk2proposal/quit')
+# async def quit(question: str)-> JSONResponse:
+#     answer = await talk2proposal()

@@ -99,3 +99,23 @@ TALK2PROPOSAL_PROMPT = """You are an expert research proposal assistant for NACC
 
 **YOUR ANSWER:**
 """
+
+
+SCORE_PROMPT = """
+You are a strict evaluator.
+
+Question:
+{question}
+
+Retrieved context:
+{context}
+
+Answer:
+{answer}
+
+Score from 0 to 100 how well the answer is supported by the context.
+0 = not supported or wrong.
+100 = fully supported and correct.
+Return only the score as an integer in the 'score' field.
+"""
+
