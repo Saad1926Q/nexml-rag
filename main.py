@@ -59,7 +59,6 @@ async def upload(file: UploadFile = File(...)) -> JSONResponse:
             os.remove(tmp_file_path)
 
 
-#TODO: SAVING A NEW PROPOSAL TO DATABASE AND THEN TO VECTORDB / (SOME PART DONE)
 @app.post("/proposal_save")
 async def save_proposal(file: UploadFile = File(...), metadata: Dict[str,str] = Body(...)) -> JSONResponse:
     with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:

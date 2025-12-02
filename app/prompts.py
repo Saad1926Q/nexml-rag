@@ -116,6 +116,7 @@ Answer:
 Score from 0 to 100 how well the answer is supported by the context.
 0 = not supported or wrong.
 100 = fully supported and correct.
-Return only the score as an integer in the 'score' field.
+- You MUST return only a number from 0 to 100.
+- No words, symbols, formatting, explanation — only the number.
 """
 
