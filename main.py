@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, status
+from fastapi import FastAPI, UploadFile, File, status, Body
 from typing import Any, Dict
 import tempfile
 import os
@@ -61,20 +61,22 @@ async def upload(file: UploadFile = File(...)) -> JSONResponse:
 
 #TODO: SAVING A NEW PROPOSAL TO DATABASE AND THEN TO VECTORDB / (SOME PART DONE)
 @app.post("/proposal_save")
-async def save_proposal(file: UploadFile = File(...)) -> JSONResponse:
+async def save_proposal(file: UploadFile = File(...), metadata: Dict[str,str] = Body(...)) -> JSONResponse:
     with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
         content = await file.read()
         tmp_file.write(content)
         tmp_file_path = tmp_file.name
 
     try:
-        save_file(content, tmp_file_path)
+        save_file(tmp_file_path, metadata)
         
         return JSONResponse(status_code=status.HTTP_200_OK, content={"message": "Proposal saved successfully!"})
 
     finally:
         if os.path.exists(tmp_file_path):
             os.remove(tmp_file_path)
+
+
 
 @app.post("/talk2proposal")
 async def chat(question: str) -> Dict[str, str]:

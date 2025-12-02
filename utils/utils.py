@@ -4,19 +4,24 @@ from langchain_experimental.text_splitter import SemanticChunker
 from langchain_huggingface import HuggingFaceEmbeddings
 from dotenv import load_dotenv
 import os
+from tqdm import tqdm
 from transformers import CLIPProcessor, CLIPModel
 import torch
 from sentence_transformers import CrossEncoder
 from scripts.doc_extractor import extract_text_images_tables
 from langchain_community.vectorstores.utils import filter_complex_metadata
 from langchain_community.vectorstores import Chroma
-from app.vector_db import talk2proposal_collection
+from app.vector_db import talk2proposal_collection, proposals_collection
 from app.prompts import SCORE_PROMPT
+from langchain_core.prompts import PromptTemplate
+from utils.schema import Score
+from langchain_core.documents import Document
+
+
 load_dotenv()
 EMBEDDING_MODEL = os.getenv("TEXT_EMBEDDING_ID")
 IMAGE_EMBEDDING_MODEL = os.getenv("CLIP_MODEL")
-from langchain_core.prompts import PromptTemplate
-from utils.schema import Score
+
     
 clip_model = CLIPModel.from_pretrained(IMAGE_EMBEDDING_MODEL)
 clip_processor = CLIPProcessor.from_pretrained(IMAGE_EMBEDDING_MODEL)
@@ -161,14 +166,27 @@ def score(proposal_text, context_text, answer_text, llm):
     
 
 
-def save_file(content, filename):
-    os.makedirs('documents', exist_ok= True)
-    file_path = os.path.join('documents',"filename")
-    with open(file_path, "wb") as f:
-        f.write(content)
-    
+def save_file(tmp_file_path, metadata):
+    doc,_ = extract_text_images_tables(tmp_file_path)
+    chunked_docs, embeddings_model = chunk_text_and_generate_embeddings(doc)
+    ids = []
+    documents = []
+    metadatas = []
+    for i, doc in enumerate(tqdm(chunked_docs, desc="Preparing Proposal for ChromaDB")):
+        ids.append(f"{tmp_file_path}_{i}")
+        documents.append(doc.page_content)
+        
+        chunk_meta = dict(metadata)            
+        metadatas.append(chunk_meta)
 
-
+    print("\nGenerating embeddings for the proposal chunks...")
+    all_embeddings = embeddings_model.embed_documents([doc.page_content for doc in chunked_docs])
+    proposals_collection.add(
+    ids=ids,
+    documents=documents,
+    embeddings=all_embeddings,
+    metadatas=metadatas
+)
 
 # def rules_storage(doc, embeddings):
 #     docs = file_loader(doc)
