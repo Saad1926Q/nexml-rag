@@ -1,7 +1,6 @@
 from docling.document_converter import DocumentConverter, PdfFormatOption
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import PdfPipelineOptions
-from utils.utils import get_image_embeddings
 from langchain_core.documents import Document
 
 
