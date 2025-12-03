@@ -1,10 +1,9 @@
-from fastapi import FastAPI, Form, UploadFile, File, status, Body
-from typing import Any, Dict, Annotated
+from fastapi import FastAPI, UploadFile, File, status, Body
+from typing import  Dict, Annotated
 import tempfile
 import os
 import json
 
-from pydantic import Json
 from app.llm import check_novelty, check_compliance, final_evaluation, talk2proposal
 from scripts.doc_extractor import extract_text_images_tables
 from fastapi.responses import JSONResponse
@@ -24,46 +23,21 @@ async def evaluate(file: UploadFile = File(...)):
         proposal_text = doc_list[0].page_content
         
         novelty_res, novelty_score, p_id = await check_novelty(proposal_text)
-        # novelty_res, p_id = await check_novelty(proposal_text)
-        # compliance_res, compliance_score = await check_compliance(proposal_text)
-        # final_res = await final_evaluation(proposal_text, novelty_res, compliance_res)
+        compliance_res, compliance_score = await check_compliance(proposal_text)
+        final_res = await final_evaluation(proposal_text, novelty_res, compliance_res)
 
-        # return EvaluationResponse(
-        #     novelty_assessment = Assessment(
-        #         summary= novelty_res,
-        #         score = novelty_score
-        #     ),
-        #     s_and_t_assessment = Assessment(
-        #         summary=compliance_res,
-        #         score = compliance_score
-        #     ),
-        #     evaluation = final_res,
-        #     proposal_ids = p_id
-        # )
-        return {
-            'novelty': novelty_res,
-            'novelty_score': novelty_score,
-            # 's_and_t_guidelines': compliance_res,
-            # 'final_res': final_res,
-            'proposal_ids': p_id
-        }
-
-    finally:
-        if os.path.exists(tmp_file_path):
-            os.remove(tmp_file_path)
-
-
-@app.post("/upload_proposal")
-async def upload(file: UploadFile = File(...)) -> JSONResponse:
-    with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
-        content = await file.read()
-        tmp_file.write(content)
-        tmp_file_path = tmp_file.name
-
-    try:
-        store_proposal_for_chat(tmp_file_path)
-        
-        return JSONResponse(status_code=status.HTTP_200_OK, content={"message": "Resource created successfully!"})
+        return EvaluationResponse(
+            novelty_assessment = Assessment(
+                summary= novelty_res,
+                score = novelty_score
+            ),
+            s_and_t_assessment = Assessment(
+                summary=compliance_res,
+                score = compliance_score
+            ),
+            evaluation = final_res,
+            proposal_ids = p_id
+        )
 
     finally:
         if os.path.exists(tmp_file_path):
@@ -96,12 +70,28 @@ async def chat(question: str) -> Dict[str, str]:
     """
     answer = await talk2proposal(question)
     return {"answer": answer}
+
+
+@app.post("/talk2proposal/upload_proposal")
+async def upload(file: UploadFile = File(...)) -> JSONResponse:
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
+        content = await file.read()
+        tmp_file.write(content)
+        tmp_file_path = tmp_file.name
+
+    try:
+        store_proposal_for_chat(tmp_file_path)
+        
+        return JSONResponse(status_code=status.HTTP_200_OK, content={"message": "Resource created successfully!"})
+
+    finally:
+        if os.path.exists(tmp_file_path):
+            os.remove(tmp_file_path)
     
-    
-@app.post("/talk2proposal/")
+@app.post("/talk2proposal/clear_memory")
 async def clear_memory() -> JSONResponse:
     delete_memory()
-    return JSONResponse(status_code=status.HTTP_200_OK, content={"message": "Resource Saved successfully!"})
+    return JSONResponse(status_code=status.HTTP_200_OK, content={"message": "Resource Deleted successfully!"})
 # @app.post('/talk2proposal/quit')
 # async def quit(question: str)-> JSONResponse:
 #     answer = await talk2proposal()
