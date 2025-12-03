@@ -69,3 +69,5 @@ nexml-rag/
 - Final evaluation score paprt pending
 - Talk to proposal
 - Arxiv feature
+- check things for a better llm response with minimal hallucination
+- regarding scores make sure that you always get a score
