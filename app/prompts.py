@@ -92,8 +92,6 @@ TALK2PROPOSAL_PROMPT = """You are an expert research proposal assistant for NACC
 
 **INSTRUCTIONS:**
 - Answer the question STRICTLY based on the information provided in the relevant chunks above
-- DO NOT answer anything outside of the provided chunks
-- If the chunks do not contain enough information to answer the question, clearly state "The provided proposal sections do not contain sufficient information to answer this question"
 - Be precise and reference specific details from the chunks when applicable
 - Keep your answer focused and concise
 

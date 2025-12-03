@@ -17,8 +17,10 @@ from langchain_core.prompts import PromptTemplate
 from utils.schema import Score
 from langchain_core.documents import Document
 from langchain_core.output_parsers import PydanticOutputParser
+import requests
 
 load_dotenv()
+SUPERMEMORY_API_KEY = os.getenv('SUPERMEMORY_API_KEY')
 EMBEDDING_MODEL = os.getenv("TEXT_EMBEDDING_ID")
 IMAGE_EMBEDDING_MODEL = os.getenv("CLIP_MODEL")
 
@@ -109,7 +111,7 @@ def query_collection(collection: Any, query_embedding: List[float], query_text: 
         include=["documents", "metadatas", "distances"]
     )
 
-    results = rerank(query_text, results, top_k=n_results)
+    # results = rerank(query_text, results, top_k=n_results)
 
     return results
 
@@ -191,6 +193,19 @@ def save_file(tmp_file_path, metadata):
     metadatas=metadatas
 )
 
+def delete_memory():
+    
+    url = "https://api.supermemory.ai/v3/documents/bulk"
+
+    payload = { "containerTags": ["Talk_2_Proposal"] }
+    headers = {
+        "Authorization": f"Bearer {SUPERMEMORY_API_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    response = requests.delete(url, json=payload, headers=headers)
+
+    return response.text
 # def rules_storage(doc, embeddings):
 #     docs = file_loader(doc)
 #     chunks = chunk_data(doc)
