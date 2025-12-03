@@ -14,7 +14,6 @@ from app.prompts import (
     NOVELTY_ANALYSIS_PROMPT,
     COMPLIANCE_CHECK_PROMPT,
     FINAL_EVALUATION_PROMPT,
-    SCORE_PROMPT,
     TALK2PROPOSAL_PROMPT
 )
 from langchain_core.output_parsers import StrOutputParser
@@ -38,7 +37,7 @@ llm = ChatGroq(
 
 parser = StrOutputParser()
 
-async def check_novelty(proposal_text: str) -> tuple[str,Score, set[str]]:
+async def check_novelty(proposal_text: str) -> tuple[str,Score,set[str]]:
     """
     Check novelty of a proposal by comparing with similar past proposals.
     """
@@ -79,9 +78,9 @@ async def check_novelty(proposal_text: str) -> tuple[str,Score, set[str]]:
     
     response_score = score(proposal_text, context_text,response, llm)
     return response, response_score, p_id
+    # return response, p_id
 
-
-async def check_compliance(proposal_text: str) -> tuple[str,Score]:
+async def check_compliance(proposal_text: str) -> str:
     """
     Check compliance of a proposal with S&T guidelines.
     """
@@ -117,8 +116,9 @@ async def check_compliance(proposal_text: str) -> tuple[str,Score]:
     })
 
 
-    compliance_score = score(proposal_text, context_text,response, llm)
-    return response, compliance_score
+    # compliance_score = score(proposal_text, context_text,response, llm)
+    # return response, compliance_score
+    return response
 
 async def final_evaluation(proposal_text: str, novelty: str, compliance: str) -> str:
     """

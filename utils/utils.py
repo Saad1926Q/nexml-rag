@@ -111,7 +111,7 @@ def query_collection(collection: Any, query_embedding: List[float], query_text: 
         include=["documents", "metadatas", "distances"]
     )
 
-    # results = rerank(query_text, results, top_k=n_results)
+    results = rerank(query_text, results, top_k=n_results)
 
     return results
 
