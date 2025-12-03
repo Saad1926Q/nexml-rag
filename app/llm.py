@@ -20,6 +20,13 @@ from app.prompts import (
 from langchain_core.output_parsers import StrOutputParser
 from utils.utils import chunk_text_and_generate_embeddings, query_collection, score
 from utils.schema import Score
+from supermemory import Supermemory
+
+SUPERMEMORY_API_KEY = os.getenv('SUPERMEMORY_API_KEY')
+client = Supermemory(
+    api_key=SUPERMEMORY_API_KEY,
+)
+
 
 GROQ_API_KEY = os.getenv('GROQ_API_KEY')
 llm = ChatGroq(
@@ -83,7 +90,7 @@ async def check_compliance(proposal_text: str) -> tuple[str,Score]:
     _, embeddings_model = chunk_text_and_generate_embeddings([proposal_doc])
     query_embedding = embeddings_model.embed_query(proposal_text)
 
-    results = query_collection(guidelines_collection, query_embedding, proposal_text, n_results=3)
+    results = query_collection(guidelines_collection, query_embedding, proposal_text, n_results=5)
 
     context_text = ""
     for i in range(len(results['documents'][0])):
@@ -140,31 +147,58 @@ async def talk2proposal(question: str) -> str:
     """
     Answer questions about a proposal by retrieving relevant chunks and using LLM.
     """
+
     question_doc = Document(page_content=question)
     _, embeddings_model = chunk_text_and_generate_embeddings([question_doc])
     query_embedding = embeddings_model.embed_query(question)
 
     results = query_collection(talk2proposal_collection, query_embedding, question, n_results=5)
+    
+    
+    response = client.memories.add(
+        content=json.dumps(results),
+        container_tags=["Talk_2_Proposal"],
+        metadata={
+            "note_id": "Retrieved_Chunks",
+        }
+    )
+    
+    
+    # context_text = ""
+    # for i in range(len(results['documents'][0])):
+    #     doc_text = results['documents'][0][i]
+    #     context_text += f"\n{'='*80}\n"
+    #     context_text += f"Chunk {i+1}:\n"
+    #     context_text += f"{doc_text}\n"
+    #     context_text += f"{'='*80}\n"
 
-    context_text = ""
-    for i in range(len(results['documents'][0])):
-        doc_text = results['documents'][0][i]
-        context_text += f"\n{'='*80}\n"
-        context_text += f"Chunk {i+1}:\n"
-        context_text += f"{doc_text}\n"
-        context_text += f"{'='*80}\n"
-
+    
     talk2proposal_prompt = PromptTemplate(
         template=TALK2PROPOSAL_PROMPT,
         input_variables=['question', 'context']
     )
-
+    
+    result = client.search.documents(
+        q = question,
+        container_tags= ["Talk_2_Proposal"],
+        limit = 7
+        
+    )
+    
     chain = talk2proposal_prompt | llm | parser
     response = chain.invoke({
         "question": question,
-        "context": context_text
+        "context": result
     })
 
+    client.memories.add(
+    content=f"[User_Query]:{question}\n\n[AI Message]:{response} ",
+    container_tags =["Talk_2_Proposal"],
+    metadata={
+        "note_id": "User_123",
+    }
+)
+    
     return response
 
 

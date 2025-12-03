@@ -6,7 +6,7 @@ import json
 from app.llm import check_novelty, check_compliance, final_evaluation, talk2proposal
 from scripts.doc_extractor import extract_text_images_tables
 from fastapi.responses import JSONResponse
-from utils.utils import store_proposal_for_chat, save_file
+from utils.utils import store_proposal_for_chat, save_file, delete_memory
 from utils.schema import Assessment, EvaluationResponse, ProposalMetadata
 app = FastAPI(title="NaCCER Auto-Evaluation")
 
@@ -19,7 +19,6 @@ async def evaluate(file: UploadFile = File(...)) -> EvaluationResponse:
 
     try:
         doc_list,_ = extract_text_images_tables(tmp_file_path)
-        print(doc_list)
         proposal_text = doc_list[0].page_content
         
         novelty_res, novelty_score, p_id = await check_novelty(proposal_text)
@@ -88,6 +87,11 @@ async def chat(question: str) -> Dict[str, str]:
     answer = await talk2proposal(question)
     return {"answer": answer}
     
+    
+@app.post("/talk2proposal/")
+async def clear_memory() -> JSONResponse:
+    delete_memory()
+    return JSONResponse(status_code=status.HTTP_200_OK, content={"message": "Resource Saved successfully!"})
 # @app.post('/talk2proposal/quit')
 # async def quit(question: str)-> JSONResponse:
 #     answer = await talk2proposal()
