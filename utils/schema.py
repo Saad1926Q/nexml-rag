@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-
+from typing import Annotated
 
 class Score(BaseModel):
     score: int = Field(..., ge=0, le=100, description="Score 0 to 100")
@@ -14,5 +14,17 @@ class EvaluationResponse(BaseModel):
     evaluation: str
     proposal_ids: set
     
-class GeneralSchema(BaseModel):
-    proposal_id: str
+from pydantic import BaseModel
+
+from pydantic import BaseModel, Field
+
+class ProposalMetadata(BaseModel):
+    proposal_id: Annotated[str, Field(..., description="Unique identifier for the research proposal")]
+    title: Annotated[str, Field(..., description="Title of the research project or proposal")]
+    pi_name: Annotated[str, Field(..., description="Name of the Principal Investigator leading the research")]
+    institution: Annotated[str, Field(..., description="Organization or institute where the research will be conducted")]
+    research_area: Annotated[str, Field(..., description="Broad domain or research field the proposal belongs to")]
+    keywords: Annotated[str, Field(..., description="Comma-separated key terms representing the core topics of the research")]
+
+    
+    

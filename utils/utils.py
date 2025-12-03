@@ -167,6 +167,7 @@ def score(proposal_text, context_text, answer_text, llm):
 
 
 def save_file(tmp_file_path, metadata):
+    print("save file started")
     doc,_ = extract_text_images_tables(tmp_file_path)
     chunked_docs, embeddings_model = chunk_text_and_generate_embeddings(doc)
     ids = []
@@ -176,7 +177,7 @@ def save_file(tmp_file_path, metadata):
         ids.append(f"{tmp_file_path}_{i}")
         documents.append(doc.page_content)
         
-        chunk_meta = dict(metadata)            
+        chunk_meta = metadata.model_dump() 
         metadatas.append(chunk_meta)
 
     print("\nGenerating embeddings for the proposal chunks...")

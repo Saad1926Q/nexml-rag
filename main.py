@@ -1,12 +1,13 @@
-from fastapi import FastAPI, UploadFile, File, status, Body
-from typing import Any, Dict
+from fastapi import FastAPI, Form, UploadFile, File, status, Body
+from typing import Any, Dict, Annotated
 import tempfile
 import os
+import json
 from app.llm import check_novelty, check_compliance, final_evaluation, talk2proposal
 from scripts.doc_extractor import extract_text_images_tables
 from fastapi.responses import JSONResponse
 from utils.utils import store_proposal_for_chat, save_file
-from utils.schema import Assessment, EvaluationResponse
+from utils.schema import Assessment, EvaluationResponse, ProposalMetadata
 app = FastAPI(title="NaCCER Auto-Evaluation")
 
 @app.post("/evaluate")
@@ -17,7 +18,8 @@ async def evaluate(file: UploadFile = File(...)) -> EvaluationResponse:
         tmp_file_path = tmp_file.name
 
     try:
-        doc_list = extract_text_images_tables(tmp_file_path)
+        doc_list,_ = extract_text_images_tables(tmp_file_path)
+        print(doc_list)
         proposal_text = doc_list[0].page_content
         
         novelty_res, novelty_score, p_id = await check_novelty(proposal_text)
@@ -60,16 +62,17 @@ async def upload(file: UploadFile = File(...)) -> JSONResponse:
 
 
 @app.post("/proposal_save")
-async def save_proposal(file: UploadFile = File(...), metadata: Dict[str,str] = Body(...)) -> JSONResponse:
+async def save_proposal(metadata: Annotated[str, Body(...)], file: UploadFile = File(...)) -> JSONResponse:
     with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
         content = await file.read()
         tmp_file.write(content)
         tmp_file_path = tmp_file.name
 
     try:
-        save_file(tmp_file_path, metadata)
-        
-        return JSONResponse(status_code=status.HTTP_200_OK, content={"message": "Proposal saved successfully!"})
+        metadata_obj = ProposalMetadata(**json.loads(metadata))
+        save_file(tmp_file_path, metadata_obj)
+    
+        return JSONResponse(status_code=status.HTTP_200_OK, content={"message": "Resource Saved successfully!"})
 
     finally:
         if os.path.exists(tmp_file_path):

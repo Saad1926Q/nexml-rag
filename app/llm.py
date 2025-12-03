@@ -83,7 +83,7 @@ async def check_compliance(proposal_text: str) -> tuple[str,Score]:
     _, embeddings_model = chunk_text_and_generate_embeddings([proposal_doc])
     query_embedding = embeddings_model.embed_query(proposal_text)
 
-    results = query_collection(guidelines_collection, query_embedding, proposal_text, n_results=5)
+    results = query_collection(guidelines_collection, query_embedding, proposal_text, n_results=3)
 
     context_text = ""
     for i in range(len(results['documents'][0])):
