@@ -116,7 +116,9 @@ Answer:
 Score from 0 to 100 how well the answer is supported by the context.
 0 = not supported or wrong.
 100 = fully supported and correct.
-- You MUST return only a number from 0 to 100.
-- No words, symbols, formatting, explanation — only the number.
+You MUST format your final answer **exactly** following the instructions below.
+Do not add any extra text before or after the JSON.\n
+\n
+{format_instructions}
 """
 

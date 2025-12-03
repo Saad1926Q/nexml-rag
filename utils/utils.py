@@ -16,7 +16,7 @@ from app.prompts import SCORE_PROMPT
 from langchain_core.prompts import PromptTemplate
 from utils.schema import Score
 from langchain_core.documents import Document
-
+from langchain_core.output_parsers import PydanticOutputParser
 
 load_dotenv()
 EMBEDDING_MODEL = os.getenv("TEXT_EMBEDDING_ID")
@@ -149,19 +149,21 @@ def store_proposal_for_chat(file_path: str):
 
 
 def score(proposal_text, context_text, answer_text, llm):
-    score_llm = llm.with_structured_output(Score)
+    parser = PydanticOutputParser(pydantic_object= Score)
+
     response_score = PromptTemplate(
         template = SCORE_PROMPT,
-        input_variables = ['question', 'context', 'answer']
+        input_variables = ['question', 'context', 'answer'],
+        partial_variables={"format_instructions": parser.get_format_instructions()},
     )
 
-    chain = response_score | score_llm 
-    score_result: Score = chain.invoke({
+    chain = response_score | llm | parser
+
+    score_result = chain.invoke({
     "question": proposal_text,
     "context": context_text,
     "answer": answer_text
 })
-
     return score_result
     
 
