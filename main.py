@@ -1,8 +1,9 @@
-from fastapi import FastAPI, Form, UploadFile, File, status, Body
-from typing import Any, Dict, Annotated
+from fastapi import FastAPI, UploadFile, File, status, Body
+from typing import  Dict, Annotated
 import tempfile
 import os
 import json
+
 from app.llm import check_novelty, check_compliance, final_evaluation, talk2proposal
 from scripts.doc_extractor import extract_text_images_tables
 from fastapi.responses import JSONResponse
@@ -11,7 +12,7 @@ from utils.schema import Assessment, EvaluationResponse, ProposalMetadata
 app = FastAPI(title="NaCCER Auto-Evaluation")
 
 @app.post("/evaluate")
-async def evaluate(file: UploadFile = File(...)) -> EvaluationResponse:
+async def evaluate(file: UploadFile = File(...)):
     with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
         content = await file.read()
         tmp_file.write(content)
@@ -37,23 +38,6 @@ async def evaluate(file: UploadFile = File(...)) -> EvaluationResponse:
             evaluation = final_res,
             proposal_ids = p_id
         )
-
-    finally:
-        if os.path.exists(tmp_file_path):
-            os.remove(tmp_file_path)
-
-
-@app.post("/upload_proposal")
-async def upload(file: UploadFile = File(...)) -> JSONResponse:
-    with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
-        content = await file.read()
-        tmp_file.write(content)
-        tmp_file_path = tmp_file.name
-
-    try:
-        store_proposal_for_chat(tmp_file_path)
-        
-        return JSONResponse(status_code=status.HTTP_200_OK, content={"message": "Resource created successfully!"})
 
     finally:
         if os.path.exists(tmp_file_path):
@@ -86,12 +70,28 @@ async def chat(question: str) -> Dict[str, str]:
     """
     answer = await talk2proposal(question)
     return {"answer": answer}
+
+
+@app.post("/talk2proposal/upload_proposal")
+async def upload(file: UploadFile = File(...)) -> JSONResponse:
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
+        content = await file.read()
+        tmp_file.write(content)
+        tmp_file_path = tmp_file.name
+
+    try:
+        store_proposal_for_chat(tmp_file_path)
+        
+        return JSONResponse(status_code=status.HTTP_200_OK, content={"message": "Resource created successfully!"})
+
+    finally:
+        if os.path.exists(tmp_file_path):
+            os.remove(tmp_file_path)
     
-    
-@app.post("/talk2proposal/")
+@app.post("/talk2proposal/clear_memory")
 async def clear_memory() -> JSONResponse:
     delete_memory()
-    return JSONResponse(status_code=status.HTTP_200_OK, content={"message": "Resource Saved successfully!"})
+    return JSONResponse(status_code=status.HTTP_200_OK, content={"message": "Resource Deleted successfully!"})
 # @app.post('/talk2proposal/quit')
 # async def quit(question: str)-> JSONResponse:
 #     answer = await talk2proposal()

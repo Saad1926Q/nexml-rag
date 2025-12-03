@@ -111,7 +111,7 @@ def query_collection(collection: Any, query_embedding: List[float], query_text: 
         include=["documents", "metadatas", "distances"]
     )
 
-    # results = rerank(query_text, results, top_k=n_results)
+    results = rerank(query_text, results, top_k=n_results)
 
     return results
 
@@ -137,7 +137,7 @@ def store_proposal_for_chat(file_path: str):
     for i, doc in enumerate(chunked_docs):
         ids.append(f"proposal_chunk_{i}")
         documents.append(doc.page_content)
-
+        metadatas.append(doc.metadata)
 
     all_embeddings = embeddings_model.embed_documents([doc.page_content for doc in chunked_docs])
 
@@ -146,6 +146,7 @@ def store_proposal_for_chat(file_path: str):
         ids=ids,
         documents=documents,
         embeddings=all_embeddings,
+        metadatas = metadatas
     )
     
 
@@ -206,8 +207,5 @@ def delete_memory():
     response = requests.delete(url, json=payload, headers=headers)
 
     return response.text
-# def rules_storage(doc, embeddings):
-#     docs = file_loader(doc)
-#     chunks = chunk_data(doc)
-    
+
     
