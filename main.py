@@ -13,7 +13,10 @@ app = FastAPI(title="NaCCER Auto-Evaluation")
 
 @app.post("/evaluate")
 async def evaluate(file: UploadFile = File(...)):
+    """Get the evaluation JSON
+    """
     with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
+        
         content = await file.read()
         tmp_file.write(content)
         tmp_file_path = tmp_file.name
@@ -46,6 +49,8 @@ async def evaluate(file: UploadFile = File(...)):
 
 @app.post("/proposal_save")
 async def save_proposal(metadata: Annotated[str, Body(...)], file: UploadFile = File(...)) -> JSONResponse:
+    """Saves Propsal in the Vector Database
+    """
     with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
         content = await file.read()
         tmp_file.write(content)
@@ -74,6 +79,9 @@ async def chat(question: str) -> Dict[str, str]:
 
 @app.post("/talk2proposal/upload_proposal")
 async def upload(file: UploadFile = File(...)) -> JSONResponse:
+    """ 
+    Upload Proposal before starting with the chat
+    """
     with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
         content = await file.read()
         tmp_file.write(content)
@@ -90,8 +98,8 @@ async def upload(file: UploadFile = File(...)) -> JSONResponse:
     
 @app.post("/talk2proposal/clear_memory")
 async def clear_memory() -> JSONResponse:
+    """
+    Clears memory of the llm
+    """
     delete_memory()
     return JSONResponse(status_code=status.HTTP_200_OK, content={"message": "Resource Deleted successfully!"})
-# @app.post('/talk2proposal/quit')
-# async def quit(question: str)-> JSONResponse:
-#     answer = await talk2proposal()
