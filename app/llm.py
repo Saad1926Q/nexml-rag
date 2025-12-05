@@ -74,9 +74,9 @@ async def check_novelty(proposal_text: str) -> tuple[str,Score,set[str]]:
         "proposal": proposal_text,
         "context": context_text
     })
-    
+    # final_response = "{}".format(response)
     response_score = score(proposal_text, context_text,response, llm)
-    return response, response_score, p_id
+    return response_score, response_score, p_id
 
 async def check_compliance(proposal_text: str) -> tuple[str, Score]:
     """
