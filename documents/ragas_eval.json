@@ -1,0 +1,272 @@
+[
+    {
+        "question": "What methodology does the project use to improve coal quality in the advanced dense medium project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Combining traditional methods with modern AI techniques."
+    },
+    {
+        "question": "What productivity improvement is expected from the dense medium quality improvement project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "An expected 30\u201340% improvement in productivity with enhanced safety measures."
+    },
+    {
+        "question": "What are the duration and total budget for the advanced dense medium project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "18 months and 4,895,969."
+    },
+    {
+        "question": "Which process does the project aim to improve in the high-ash coal efficiency proposal?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Flotation for efficiency improvement of high-ash coal."
+    },
+    {
+        "question": "What funding source and duration are specified for the novel flotation approach project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "CIL and 18 months."
+    },
+    {
+        "question": "What operational outcome is anticipated for CIL subsidiaries in the flotation approach project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Significantly improved operational efficiency and reduced costs for CIL subsidiaries."
+    },
+    {
+        "question": "Which classification method is targeted in the high-ash coal efficiency project led by Prof. Suresh Mehta?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Air classification for efficiency improvement of high-ash coal."
+    },
+    {
+        "question": "What is the primary methodology used in the air classification project for high-ash coal?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Integration of IoT technologies and data analytics."
+    },
+    {
+        "question": "Who is the PI and which institution leads the air classification project for high-ash coal?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Prof. Suresh Mehta at CSIR-CMRI."
+    },
+    {
+        "question": "What separation technique is being developed to improve coal quality in the Anna University proposal?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Advanced gravity separation for coal quality improvement."
+    },
+    {
+        "question": "What productivity and safety outcomes are expected from the gravity separation project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "A 30\u201340% improvement in productivity and enhanced safety measures."
+    },
+    {
+        "question": "Which institution and research area anchor the gravity separation proposal?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Anna University in Air Quality Control."
+    },
+    {
+        "question": "Which process is being optimized in the IISc Bangalore proposal focused on quality improvement?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "The flotation process for quality improvement."
+    },
+    {
+        "question": "What methodology is used in the flotation process optimization project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Cutting-edge automation and computational methods."
+    },
+    {
+        "question": "What is the total budget allocated to the flotation quality improvement project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "4,071,278."
+    },
+    {
+        "question": "What is the primary focus of the deep learning framework proposal in coal mining?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "A deep learning framework for process control in coal mining."
+    },
+    {
+        "question": "Which ministry funds the deep learning framework project and what is its duration?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "MoC and 24 months."
+    },
+    {
+        "question": "What improvement is expected from the deep learning process control project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "A 30\u201340% improvement in productivity with enhanced safety."
+    },
+    {
+        "question": "What environmental benefit does the flotation waste minimization project aim to enable?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Sustainable mining practices and environmental compliance."
+    },
+    {
+        "question": "What methodology is used in the flotation waste minimization proposal?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Combining traditional methods with modern AI techniques."
+    },
+    {
+        "question": "Who is the PI and which institution leads the flotation waste minimization project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Dr. Lakshmi Mehta at IISc Bangalore."
+    },
+    {
+        "question": "What is the waste-related objective of the advanced flotation project led by NERIST?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Waste minimization in Indian coal via advanced flotation."
+    },
+    {
+        "question": "What methodology underpins the advanced flotation waste minimization project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Integration of IoT technologies and data analytics."
+    },
+    {
+        "question": "What are the duration and total budget for the advanced flotation waste minimization proposal?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "12 months and 3,696,358."
+    },
+    {
+        "question": "What sorting approach is proposed for improving efficiency in high-ash coal?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Sensor-based sorting for high-ash coal."
+    },
+    {
+        "question": "Which institution and research area lead the sensor-based sorting project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "IIT Dhanbad in Mine Ventilation."
+    },
+    {
+        "question": "What environmental outcome is highlighted for the sensor-based sorting proposal?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Sustainable mining practices and environmental compliance."
+    },
+    {
+        "question": "Which process is being optimized to enhance grade in the BIT Mesra proposal?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "The air classification process for grade enhancement."
+    },
+    {
+        "question": "What is the total budget for the air classification grade enhancement project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "4,702,001."
+    },
+    {
+        "question": "What methodology underlies the air classification grade enhancement project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Integration of IoT technologies and data analytics."
+    },
+    {
+        "question": "What control approach is the focus of the NERIST project on process control optimization?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Autonomous control for process control optimization."
+    },
+    {
+        "question": "Which methodology is used in the autonomous control optimization project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Utilizing machine learning algorithms and advanced sensors."
+    },
+    {
+        "question": "What are the duration and research area for the autonomous control optimization project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "36 months in Automation & AI."
+    },
+    {
+        "question": "What technology is being developed to achieve sustainable efficiency improvement in the IIT Bombay proposal?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Innovative air classification technology for sustainable efficiency improvement."
+    },
+    {
+        "question": "Who is the PI and which institution leads the sustainable efficiency air classification project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Prof. Lakshmi Nair at IIT Bombay."
+    },
+    {
+        "question": "What methodology guides the sustainable efficiency air classification project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Combining traditional methods with modern AI techniques."
+    },
+    {
+        "question": "What is the optimization focus of the CSIR-CIMFR proposal on productivity?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Computer vision-based optimization for productivity."
+    },
+    {
+        "question": "What duration and funding source are specified for the computer vision productivity project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "36 months funded by CIL."
+    },
+    {
+        "question": "What methodology is employed in the computer vision-based productivity optimization project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Combining traditional methods with modern AI techniques."
+    },
+    {
+        "question": "What platform is being developed for safety in the IIT Delhi project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "An intelligent detection platform for hazard detection prediction."
+    },
+    {
+        "question": "Which funding source supports the intelligent hazard detection platform, and what is the total budget?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "MoC with a total budget of 10,214,790."
+    },
+    {
+        "question": "What methodology is used in the intelligent hazard detection platform project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Integration of IoT technologies and data analytics."
+    },
+    {
+        "question": "Which process is being optimized for quality improvement in the NIT Durgapur proposal?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "The air classification process for quality improvement."
+    },
+    {
+        "question": "What methodology guides the air classification quality improvement project at NIT Durgapur?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Utilizing machine learning algorithms and advanced sensors."
+    },
+    {
+        "question": "Who is the PI and which institution leads the air classification quality improvement project?",
+        "answer": "",
+        "contexts": "",
+        "ground_truth": "Dr. Sneha Desai at NIT Durgapur."
+    }
+]
