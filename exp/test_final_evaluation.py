@@ -3,7 +3,7 @@ import asyncio
 import os
 import sys
 
-# make sure repo root is on sys.path
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from scripts.doc_extractor import extract_text_images_tables

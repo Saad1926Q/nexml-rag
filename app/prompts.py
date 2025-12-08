@@ -120,3 +120,49 @@ Do not add any extra text before or after the JSON.\n
 {format_instructions}
 """
 
+FAITHFULNESS_PROMPT = """You are evaluating if a response is faithful to provided contexts.
+
+RESPONSE:
+{response}
+
+CONTEXTS:
+{context}
+
+Task: Determine if ALL claims in the response are supported by the contexts.
+- If response has facts NOT in context (hallucination) = low score
+- If all facts are in context = high score
+
+Score from 0 to 1 (0=hallucinated, 1=fully faithful)
+Respond with ONLY a single number between 0 and 1, nothing else."""
+
+CONTEXT_PRECISION_PROMPT = """You are evaluating if retrieved contexts are relevant to the question.
+
+QUESTION:
+{question}
+
+CONTEXTS:
+{context}
+
+Task: Judge how many of these contexts are actually relevant to answering the question.
+Count relevant contexts / total contexts = precision score
+
+Score from 0 to 1 (0=no relevant contexts, 1=all relevant)
+Respond with ONLY a single number between 0 and 1, nothing else."""
+
+CONTEXT_RECALL_PROMPT = """You are evaluating if retrieved contexts have ALL needed information.
+
+QUESTION:
+{question}
+
+GROUND_TRUTH (expected answer):
+{ground_truth}
+
+RETRIEVED_CONTEXTS:
+{context}
+
+Task: Judge if the retrieved contexts contain enough information to generate the ground truth answer.
+- If contexts have all needed info = high score
+- If contexts are missing key info = low score
+
+Score from 0 to 1 (0=missing critical info, 1=all info present)
+Respond with ONLY a single number between 0 and 1, nothing else."""

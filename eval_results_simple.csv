@@ -1,0 +1,223 @@
+question,response,reference,context_relevance,answer_relevance,faithfulness,context_precision,context_recall
+What methodology does the project use to improve coal quality in the advanced dense medium project?,"Based on the provided information, the project that uses a methodology to improve coal quality in the advanced dense medium project is:
+
+Proposal ID: NACCER/2024/RD/3076
+Title: Novel Dense Medium Approach for Waste Minimization of High-Ash Coal
+PI: Prof. Manoj Iyer
+Institution: VNIT Nagpur
+Research Area: Renewable Energy
+
+This project specifically mentions a ""Novel Dense Medium Approach"" which is relevant to the question about improving coal quality in the advanced dense medium project.",Combining traditional methods with modern AI techniques.,0.7364264741860842,0.931988131322085,0.75,0.25,0.0
+What productivity improvement is expected from the dense medium quality improvement project?,"Based on the provided proposal chunks, the expected productivity improvement from the dense medium quality improvement project is 30-40%. This is mentioned in the following proposals:
+
+- Proposal ID: NACCER/2023/RD/5457
+- Proposal ID: NACCER/2022/RD/2364
+- Proposal ID: NACCER/2024/RD/3972
+- Proposal ID: NACCER/2022/RD/2537
+- Proposal ID: NACCER/2024/RD/9533
+
+All these proposals mention the expected outcome of a 30-40% improvement in productivity.",An expected 30–40% improvement in productivity with enhanced safety measures.,0.6683559746675867,0.928617264575617,1.0,0.8,1.0
+What are the duration and total budget for the advanced dense medium project?,"Unfortunately, the relevant chunks do not provide information on the duration and total budget for the advanced dense medium project. However, I can suggest that you may need to refer to the proposal documents or contact the Principal Investigator (PI) for Dr. Amit Rao for more information.
+
+If I had to make an educated guess based on the provided information, I would say that the duration and total budget for the advanced dense medium project are not specified in the provided chunks.","18 months and 4,895,969.",0.62612317794344,0.942477519935004,0.75,0.5,0.0
+Which process does the project aim to improve in the high-ash coal efficiency proposal?,"Based on the provided information, the project aims to improve the ""Sorting"" process in the high-ash coal efficiency proposal. 
+
+This is evident from the following proposal IDs:
+
+- NACCER/2022/RD/6503: ""Novel Sensor-Based Sorting Approach for Grade Enhancement of High-Ash Coal""
+- NACCER/2022/RD/7291: ""Innovative Sensor-Based Sorting Technology for Sustainable Grade Enhancement""
+
+Both of these proposals focus on improving the sorting process for high-ash coal, which aligns with the goal of enhancing efficiency and reducing costs for CIL subsidiaries.",Flotation for efficiency improvement of high-ash coal.,0.7641506179328191,0.8204895101614014,0.5,0.5,0.5
+What funding source and duration are specified for the novel flotation approach project?,"Unfortunately, the relevant chunks do not provide information about a ""novel flotation approach project."" However, they do mention several projects related to coal quality improvement.
+
+If we consider the closest related project, it would be ""Development of Advanced Sensor-Based Sorting for Grade Enhancement in Indian Coal"" with Proposal ID: NACCER/2024/RD/9533. 
+
+However, the funding source and duration for this project are not specified in the provided chunks.",CIL and 18 months.,0.7436458865321735,0.8285195451551836,0.875,0.5,0.0
+What operational outcome is anticipated for CIL subsidiaries in the flotation approach project?,"Based on the provided proposal chunks, the operational outcome anticipated for CIL subsidiaries in the flotation approach project is:
+
+- Improved operational efficiency
+- Reduced costs
+
+This is mentioned in all the relevant proposal chunks, specifically:
+
+- Proposal ID: NACCER/2024/RD/1814
+- Proposal ID: NACCER/2022/RD/9588
+- Proposal ID: NACCER/2023/RD/8955
+- Proposal ID: NACCER/2023/RD/4739
+- Proposal ID: NACCER/2022/RD/1403",Significantly improved operational efficiency and reduced costs for CIL subsidiaries.,0.7245103537949034,0.9322886622656816,1.0,0.8,1.0
+Which classification method is targeted in the high-ash coal efficiency project led by Prof. Suresh Mehta?,"Unfortunately, the provided chunks do not mention a high-ash coal efficiency project led by Prof. Suresh Mehta. However, I can suggest that you may want to check other proposal IDs or details that might be relevant to your question.
+
+If you provide more information or context about the project, I can try to assist you further.",Air classification for efficiency improvement of high-ash coal.,0.7024349904124435,0.8965331780916916,0.5,0.5,0.0
+What is the primary methodology used in the air classification project for high-ash coal?,"Based on the provided information, I couldn't find a specific proposal that directly addresses the air classification project for high-ash coal. However, I can suggest a possible connection to Proposal ID: NACCER/2022/RD/5872, titled ""Innovative Sensor-Based Sorting Technology for Sustainable Quality Improvement"" by Dr. Sanjay Desai from BIT Mesra, which falls under the Research Area of ""Air Quality Control"".
+
+Although this proposal doesn't explicitly mention air classification for high-ash coal, it does focus on sustainable quality improvement, which might be related to the air classification process. However, without more specific information, it's difficult to determine the primary methodology used in the air classification project for high-ash coal.
+
+If you could provide more context or clarify the specific proposal you're referring to, I'd be happy to assist further.",Integration of IoT technologies and data analytics.,0.7129018968984415,0.9141760464915787,0.875,0.25,0.0
+Who is the PI and which institution leads the air classification project for high-ash coal?,"Based on the provided information, the PI and institution leading the air classification project for high-ash coal are not explicitly mentioned. However, Proposal ID: NACCER/2024/RD/3076, titled ""Novel Dense Medium Approach for Waste Minimization of High-Ash Coal,"" is related to high-ash coal.
+
+The PI for this project is Prof. Manoj Iyer, and the institution leading the project is VNIT Nagpur.",Prof. Suresh Mehta at CSIR-CMRI.,0.7470473528895434,0.9314552248074895,0.75,0.5,0.5
+What separation technique is being developed to improve coal quality in the Anna University proposal?,"Based on the provided information, two separation techniques are being developed to improve coal quality:
+
+1. **Flotation Process** (Proposal ID: NACCER/2022/RD/9610) - This is being optimized by Dr. Manoj Mehta from IISc Bangalore to improve coal quality.
+2. **Air Classification Process** (Proposal ID: NACCER/2024/RD/5576) - This is being optimized by Dr. Anjali Reddy from BIT Mesra to enhance coal grade.
+
+Additionally, an **Air Classification Technology** is being developed (Proposal ID: NACCER/2024/RD/5547) by Prof. Lakshmi Nair from IIT Bombay for sustainable efficiency improvement.",Advanced gravity separation for coal quality improvement.,0.7943491822742519,0.8845106142157472,0.875,0.5,0.0
+What productivity and safety outcomes are expected from the gravity separation project?,"Based on the provided proposal chunks, the expected productivity and safety outcomes from the gravity separation project are:
+
+- A 30-40% improvement in productivity
+- Enhanced safety measures",A 30–40% improvement in productivity and enhanced safety measures.,0.6742042621599613,0.969123806306653,1.0,0.8,1.0
+Which institution and research area anchor the gravity separation proposal?,"Based on the provided information, the institution and research area that anchor the gravity separation proposal are:
+
+- Institution: Anna University
+- Research Area: Air Quality Control
+
+This is evident from Proposal ID: NACCER/2022/RD/2364, which is titled ""Development of Advanced Gravity Separation for Quality Improvement in Indian Coal"" and has Air Quality Control as its research area.",Anna University in Air Quality Control.,0.7410229537071109,0.8955586669012333,0.75,0.5,0.5
+Which process is being optimized in the IISc Bangalore proposal focused on quality improvement?,"Based on the provided information, I could not find any proposal from IISc Bangalore. However, I can suggest that you may be referring to one of the other proposals. 
+
+If you are referring to the proposal from CSIR-CIMFR, which is one of the institutions mentioned, then the process being optimized in the IISc Bangalore proposal focused on quality improvement is not explicitly mentioned. However, if we consider the proposal from CSIR-CIMFR (Proposal ID: NACCER/2023/RD/8955), the process being optimized is ""Computer Vision-Based Optimization for Productivity"".",The flotation process for quality improvement.,0.6732230524721914,0.9408338220688759,0.875,0.5,0.5
+What methodology is used in the flotation process optimization project?,"Unfortunately, the provided chunks do not mention the methodology used in the flotation process optimization project. However, they do mention various research projects related to coal quality improvement and process control.
+
+If we look at the research areas mentioned in the proposals, we can infer that the methodology might involve techniques from Rock Mechanics, Air Quality Control, Automation & AI, IoT in Mining, or Coal Beneficiation.
+
+To provide a more accurate answer, I would need more information about the specific project or proposal related to flotation process optimization.",Cutting-edge automation and computational methods.,0.7017877173281624,0.927968712467896,0.875,0.5,0.5
+What is the total budget allocated to the flotation quality improvement project?,"Unfortunately, the provided chunks do not mention the total budget allocated to the flotation quality improvement project. However, they do mention the expected outcomes of several projects, including a 30-40% improvement in productivity and enhanced safety measures.
+
+To find the relevant information, we need to look for a project related to flotation quality improvement. However, none of the provided chunks mention a project with this title. 
+
+If you could provide more information or context about the project, I would be happy to assist you further.","4,071,278.",0.6391523398763223,0.9649034080508186,0.875,0.5,0.0
+What is the primary focus of the deep learning framework proposal in coal mining?,"Based on the provided information, there is no specific proposal that focuses on a deep learning framework in coal mining. However, one proposal (Proposal ID: NACCER/2024/RD/3076) is related to a ""Novel Dense Medium Approach"" which might involve some form of advanced technology or algorithm, but it does not explicitly mention deep learning.
+
+If you are looking for a proposal that involves deep learning, it is not mentioned in the provided chunks.",A deep learning framework for process control in coal mining.,0.6545601234754385,0.9424417934885748,0.75,0.5,0.0
+Which ministry funds the deep learning framework project and what is its duration?,"Based on the provided information, the ministry that funds the deep learning framework project is not explicitly mentioned. However, the proposal ID (NACCER/2024/RD/3972) suggests that it is funded by NACCER.
+
+The duration of the deep learning framework project is not mentioned in the provided chunks.",MoC and 24 months.,0.5303354297290513,0.9404564135821145,0.875,0.25,0.5
+What improvement is expected from the deep learning process control project?,"Based on the provided proposal chunks, the expected improvement from the deep learning process control project is a 30-40% improvement in productivity and enhanced safety measures. This is as stated in the proposal ID: NACCER/2024/RD/3972, under the title ""Deep Learning Framework for Process Control in Coal Mining"" led by Dr. Kavita Rao.",A 30–40% improvement in productivity with enhanced safety.,0.7062908169452344,0.932392457875391,1.0,0.5,1.0
+What environmental benefit does the flotation waste minimization project aim to enable?,The flotation waste minimization project aims to enable sustainable mining practices and environmental compliance.,Sustainable mining practices and environmental compliance.,0.7343585039690452,0.9052127258290628,1.0,0.5,1.0
+What methodology is used in the flotation waste minimization proposal?,"Unfortunately, the provided chunks do not mention a ""flotation waste minimization proposal."" However, based on the information given, I can infer that the relevant proposal might be related to coal quality improvement or beneficiation.
+
+If we consider the proposals related to coal quality improvement, we can see that they all mention expected outcomes of 30-40% improvement in productivity and enhanced safety measures. However, none of them explicitly mention the methodology used for flotation waste minimization.
+
+If we look at the research areas mentioned in the proposals, we can see that some of them are related to coal beneficiation (Proposal ID: NACCER/2024/RD/9533) or air quality control (Proposal ID: NACCER/2022/RD/2364). However, these proposals do not explicitly mention the methodology used for flotation waste minimization.
+
+Therefore, based on the provided information, I am unable to determine the methodology used in the flotation waste minimization proposal.",Combining traditional methods with modern AI techniques.,0.6907881357197284,0.9255077491342181,0.8,0.5,0.5
+Who is the PI and which institution leads the flotation waste minimization project?,"Based on the provided information, I couldn't find any proposal related to the ""flotation waste minimization project."" However, I can suggest that you may be looking for a proposal related to coal quality improvement or waste reduction.
+
+If you're looking for a PI and institution for a project related to coal quality improvement or waste reduction, I can suggest the following:
+
+- Proposal ID: NACCER/2022/RD/2537 (Development of Advanced Sensor-Based Sorting for Quality Improvement in Indian Coal)
+  - PI: Dr. Manoj Gupta
+  - Institution: IIT Delhi
+
+Please note that this is not the exact project you're looking for, but it's related to coal quality improvement. If you have more information or context about the ""flotation waste minimization project,"" I can try to help you further.",Dr. Lakshmi Mehta at IISc Bangalore.,0.7206160564476836,0.8981817269030214,0.875,0.5,0.0
+What is the waste-related objective of the advanced flotation project led by NERIST?,"Based on the provided information, the waste-related objective of the advanced flotation project led by NERIST is not explicitly mentioned. However, we can infer that the objective is related to waste minimization.
+
+The proposal ID NACCER/2024/RD/8535, titled ""Optimization of Flotation Process for Waste Minimization,"" explicitly mentions ""waste minimization"" in its title. This suggests that the project aims to minimize waste through the optimization of the flotation process.
+
+Additionally, the proposal ID NACCER/2024/RD/3076, titled ""Novel Dense Medium Approach for Waste Minimization of High-Ash Coal,"" also focuses on waste minimization.",Waste minimization in Indian coal via advanced flotation.,0.74103989717754,0.9200054312997077,0.875,0.5,0.5
+What methodology underpins the advanced flotation waste minimization project?,"Based on the provided information, the advanced flotation waste minimization project is not explicitly mentioned in the chunks. However, we can infer that the project is related to the proposal with the title ""Optimization of Flotation Process for Waste Minimization"" (Proposal ID: NACCER/2024/RD/8535).
+
+Unfortunately, the methodology underpinning this project is not explicitly stated in the provided chunks. However, we can make an educated guess that the project might involve the optimization of the flotation process to minimize waste, which could involve the use of advanced sensors, real-time monitoring, or novel dense medium approaches.
+
+To provide a more accurate answer, I would recommend reviewing the full proposal for NACCER/2024/RD/8535, which is not provided in the given chunks.",Integration of IoT technologies and data analytics.,0.7039574741380995,0.918689139296474,0.875,0.25,0.0
+What are the duration and total budget for the advanced flotation waste minimization proposal?,"Unfortunately, the provided chunks do not contain any information about the ""advanced flotation waste minimization proposal."" However, I can provide information on the duration and total budget for the proposals mentioned.
+
+Since the ""advanced flotation waste minimization proposal"" is not mentioned, I will not be able to provide a specific answer to the question. However, if you would like to know the duration and total budget for any of the mentioned proposals, I can try to help.
+
+For example, if you would like to know the duration and total budget for the ""Development of Advanced Dense Medium for Quality Improvement in Indian Coal"" (Proposal ID: NACCER/2023/RD/5457), I can try to help.","12 months and 3,696,358.",0.6884127024153911,0.9502177873309648,0.5,0.5,0.0
+What sorting approach is proposed for improving efficiency in high-ash coal?,"Based on the provided information, the sorting approach proposed for improving efficiency in high-ash coal is a ""Novel Sensor-Based Sorting Approach"" as mentioned in Proposal ID: NACCER/2022/RD/6503.",Sensor-based sorting for high-ash coal.,0.7051356726470204,0.9527796189765723,0.5,0.25,0.5
+Which institution and research area lead the sensor-based sorting project?,"Based on the provided information, the institution and research area that lead the sensor-based sorting project are:
+
+- Institution: IIT Delhi
+- Research Area: IoT in Mining
+
+This is evident from Proposal ID: NACCER/2022/RD/2537, where Dr. Manoj Gupta is the PI, and the research area is IoT in Mining.",IIT Dhanbad in Mine Ventilation.,0.7255035093193063,0.9094815584068441,0.75,0.5,0.5
+What environmental outcome is highlighted for the sensor-based sorting proposal?,"The environmental outcome highlighted for the sensor-based sorting proposal is not explicitly mentioned in the provided chunks. However, it can be inferred that the proposals aim to improve productivity and enhance safety measures, which may indirectly contribute to a positive environmental outcome. 
+
+Specifically, the proposals mention ""enhanced safety measures"" which could imply a reduction in environmental hazards associated with coal mining.",Sustainable mining practices and environmental compliance.,0.743620033006647,0.9341830138318445,0.875,0.8,0.0
+Which process is being optimized to enhance grade in the BIT Mesra proposal?,"Based on the provided information, the process being optimized to enhance grade in the BIT Mesra proposal is not explicitly mentioned. However, we can infer that the process being optimized is related to coal quality improvement.
+
+Among the provided proposals, the one that is most relevant to BIT Mesra is Proposal ID: NACCER/2024/RD/5678, which is titled ""Novel Gravity Separation Approach for Quality Improvement of High-Ash Coal"" and is related to Carbon Capture at IISc Bangalore.
+
+However, since the question specifically asks about BIT Mesra, we need to look for a proposal that is associated with BIT Mesra. Unfortunately, BIT Mesra is not mentioned in any of the provided proposals.
+
+Therefore, I must conclude that the process being optimized to enhance grade in the BIT Mesra proposal is not explicitly mentioned in the provided information.",The air classification process for grade enhancement.,0.7372505033068754,0.916039565745145,0.875,0.8,0.5
+What is the total budget for the air classification grade enhancement project?,"Unfortunately, the provided chunks do not contain any information about the total budget for the air classification grade enhancement project. However, Proposal ID: NACCER/2024/RD/9533, titled ""Development of Advanced Sensor-Based Sorting for Grade Enhancement in Indian Coal,"" is related to air classification, but the budget details are not mentioned.
+
+If you could provide more context or details about the project, I may be able to assist you further.","4,702,001.",0.700083429845051,0.9190829977233919,0.75,0.5,0.0
+What methodology underlies the air classification grade enhancement project?,"Unfortunately, the provided chunks do not explicitly mention the methodology underpinning the air classification grade enhancement project. However, based on the titles and research areas of the proposals, it can be inferred that the project likely involves the application of air quality control techniques.
+
+Specifically, Proposal ID: NACCER/2022/RD/2364, titled ""Development of Advanced Gravity Separation for Quality Improvement in Indian Coal"" with a research area of ""Air Quality Control,"" suggests that the project may utilize air classification techniques for grade enhancement.
+
+Therefore, the methodology underlying the air classification grade enhancement project is likely related to air quality control, possibly involving advanced gravity separation techniques.",Integration of IoT technologies and data analytics.,0.7591676923700951,0.8999788144407219,0.875,0.5,0.5
+What control approach is the focus of the NERIST project on process control optimization?,"Based on the provided information, the focus of the NERIST project on process control optimization is a Deep Learning Framework for Process Control in Coal Mining. 
+
+This is evident from Proposal ID: NACCER/2024/RD/3972, where the title explicitly mentions ""Deep Learning Framework for Process Control in Coal Mining"" and the PI is Dr. Kavita Rao from NERIST, with a Research Area of Automation & AI.",Autonomous control for process control optimization.,0.6886822296108251,0.8377159518113113,0.5,0.25,0.0
+Which methodology is used in the autonomous control optimization project?,"Based on the provided information, I couldn't find any specific details about the autonomous control optimization project. However, I can suggest that the methodology used in the project might be related to the research area of the proposal.
+
+Among the provided proposals, the one that seems most relevant to autonomous control optimization is Proposal ID: NACCER/2024/RD/3972, titled ""Deep Learning Framework for Process Control in Coal Mining."" This proposal is under the research area of ""Automation & AI,"" which suggests that the methodology used might involve deep learning techniques.
+
+Therefore, based on the available information, the methodology used in the autonomous control optimization project might be deep learning, as mentioned in Proposal ID: NACCER/2024/RD/3972.",Utilizing machine learning algorithms and advanced sensors.,0.6820283936148581,0.8593205768361742,0.875,0.5,0.5
+What are the duration and research area for the autonomous control optimization project?,"Based on the provided information, I found a proposal that seems to be related to the autonomous control optimization project. 
+
+The proposal ID is NACCER/2024/RD/3972, and the title is ""Deep Learning Framework for Process Control in Coal Mining."" 
+
+The duration and research area for this project are:
+
+- Duration: Not explicitly mentioned in the provided chunks.
+- Research Area: Automation & AI",36 months in Automation & AI.,0.706045369241689,0.8308186660092192,0.875,0.5,0.5
+What technology is being developed to achieve sustainable efficiency improvement in the IIT Bombay proposal?,"Based on the provided information, the technology being developed to achieve sustainable efficiency improvement in the IIT Bombay proposal is not explicitly mentioned. However, we can infer that the proposal is related to the research area of Mineral Processing.
+
+Among the provided proposals, the following are related to Mineral Processing:
+
+1. Proposal ID: NACCER/2024/RD/1814 - Novel Flotation Approach for Efficiency Improvement of High-Ash Coal
+2. Proposal ID: NACCER/2022/RD/9588 - Development of Advanced Flotation for Waste Minimization in Indian Coal
+3. Proposal ID: NACCER/2022/RD/1403 - Optimization of Gravity Separation Process for Quality Improvement
+
+However, there is no proposal from IIT Bombay in the provided chunks.",Innovative air classification technology for sustainable efficiency improvement.,0.7278822410430619,0.8742976953355535,0.5,0.5,0.0
+Who is the PI and which institution leads the sustainable efficiency air classification project?,"Based on the provided information, I couldn't find any proposal related to the ""sustainable efficiency air classification project."" However, I found a proposal related to ""Air Quality Control"" under Proposal ID: NACCER/2022/RD/2364.
+
+The PI for this proposal is Prof. Manoj Iyer, and the institution leading this project is Anna University.",Prof. Lakshmi Nair at IIT Bombay.,0.6667807196299859,0.9080566394646958,0.5,0.5,0.0
+What methodology guides the sustainable efficiency air classification project?,"Unfortunately, the provided chunks do not mention the methodology for the sustainable efficiency air classification project. However, they do provide information on various projects related to coal quality improvement and process control.
+
+If we look at the research areas mentioned in the proposals, we can infer that the sustainable efficiency air classification project might be related to Air Quality Control (Proposal ID: NACCER/2022/RD/2364) or Coal Beneficiation (Proposal ID: NACCER/2024/RD/9533).
+
+However, without specific information on the methodology for the sustainable efficiency air classification project, it is difficult to provide a precise answer.",Combining traditional methods with modern AI techniques.,0.7159898439524545,0.9110737156185911,0.75,0.5,0.5
+What is the optimization focus of the CSIR-CIMFR proposal on productivity?,"Based on the provided information, the optimization focus of the CSIR-CIMFR proposal on productivity is the development of Advanced Air Classification for Grade Enhancement in Indian Coal. 
+
+This is evident from Proposal ID: NACCER/2023/RD/1651, where the expected outcomes include a 30-40% improvement in productivity and enhanced safety measures.",Computer vision-based optimization for productivity.,0.7905727338681652,0.8447613530643943,0.5,0.8,0.5
+What duration and funding source are specified for the computer vision productivity project?,"Unfortunately, there is no information provided about a ""computer vision productivity project"" in the given chunks. However, I can provide information on the duration and funding source for a project that seems related to productivity improvement in coal mining.
+
+The project ""Deep Learning Framework for Process Control in Coal Mining"" (Proposal ID: NACCER/2024/RD/3972) does not specify the duration. However, it does not provide information on the funding source either.
+
+If you are looking for information on a different project, please provide more context or details.",36 months funded by CIL.,0.6615119436927617,0.902654249100757,0.5,0.5,0.0
+What methodology is employed in the computer vision-based productivity optimization project?,"Based on the provided information, the computer vision-based productivity optimization project is not explicitly mentioned in the given proposal chunks. However, one proposal that mentions a related concept is:
+
+Proposal ID: NACCER/2024/RD/9533
+Title: Development of Advanced Sensor-Based Sorting for Grade Enhancement in Indian Coal
+PI: Dr. Divya Kumar
+Institution: NERIST
+Research Area: Coal Beneficiation
+
+Although this proposal does not specifically mention ""computer vision,"" it does involve ""Advanced Sensor-Based Sorting,"" which could potentially utilize computer vision techniques for image processing and object detection.",Combining traditional methods with modern AI techniques.,0.7012723857797998,0.8499749561451486,0.875,0.5,0.5
+What platform is being developed for safety in the IIT Delhi project?,"Based on the provided information, I couldn't find a specific platform being developed for safety in the IIT Delhi project. However, I found a project related to mine safety, which is:
+
+Proposal ID: NACCER/2023/RD/4739
+Title: Intelligent Monitoring Platform for Gas Monitoring Prediction
+PI: Dr. Amit Singh
+Institution: CSIR-CMRI
+Research Area: Mine Safety
+
+This project aims to improve operational efficiency and reduce costs for CIL subsidiaries, but it does not explicitly mention IIT Delhi.",An intelligent detection platform for hazard detection prediction.,0.6846079110330228,0.9104755249742817,0.5,0.25,0.0
+"Which funding source supports the intelligent hazard detection platform, and what is the total budget?","Based on the provided information, I couldn't find a specific proposal that directly mentions an ""intelligent hazard detection platform."" However, I can suggest a proposal that might be related to the topic.
+
+Proposal ID: NACCER/2024/RD/9533, titled ""Development of Advanced Sensor-Based Sorting for Grade Enhancement in Indian Coal,"" has a PI from NERIST, Dr. Divya Kumar, in the Research Area of Coal Beneficiation. 
+
+Unfortunately, there is no specific information about the funding source or the total budget for this proposal in the provided chunks.","MoC with a total budget of 10,214,790.",0.731752585758197,0.8318257207247601,0.875,0.5,0.0
+What methodology is used in the intelligent hazard detection platform project?,"Unfortunately, the provided chunks do not explicitly mention the methodology used in the intelligent hazard detection platform project. However, based on the titles and research areas of the proposals, it can be inferred that the project might involve the use of advanced technologies such as deep learning, IoT, and automation.
+
+Proposal ID: NACCER/2024/RD/3972, ""Deep Learning Framework for Process Control in Coal Mining,"" suggests that the project might utilize deep learning techniques for process control in coal mining.",Integration of IoT technologies and data analytics.,0.6976371811700901,0.8497629347836577,0.75,0.5,0.5
+Which process is being optimized for quality improvement in the NIT Durgapur proposal?,"Based on the provided information, the process being optimized for quality improvement in the NIT Durgapur proposal is not explicitly mentioned. However, we can infer that it is related to the proposal with the ID NACCER/2022/RD/1403, which is titled ""Optimization of Gravity Separation Process for Quality Improvement"" and is associated with NIT Rourkela, not NIT Durgapur.",The air classification process for quality improvement.,0.673252119557276,0.9137232830623896,0.5,0.5,0.5
+What methodology guides the air classification quality improvement project at NIT Durgapur?,"Based on the provided information, the air classification quality improvement project at NIT Durgapur is guided by the methodology outlined in Proposal ID: NACCER/2023/RD/8968, titled ""Novel Air Classification Approach for Efficiency Improvement of High-Ash Coal"" led by Prof. Suresh Mehta from CSIR-CMRI.",Utilizing machine learning algorithms and advanced sensors.,0.7032614411185781,0.9325961606949383,0.75,0.25,0.0
+Who is the PI and which institution leads the air classification quality improvement project?,"Based on the provided information, the PI (Principal Investigator) and the institution leading the air classification quality improvement project are not explicitly mentioned in the given chunks. However, Proposal ID: NACCER/2022/RD/2364 is related to ""Air Quality Control"" as its Research Area.
+
+So, the PI is Prof. Manoj Iyer, and the institution leading the project is Anna University.",Dr. Sneha Desai at NIT Durgapur.,0.7048086287347599,0.9320814254423525,0.5,0.5,0.0
