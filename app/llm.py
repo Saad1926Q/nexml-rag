@@ -11,6 +11,7 @@ from langchain_core.documents import Document
 from app.vector_db import proposals_collection, guidelines_collection, talk2proposal_collection, budget_collection
 from app.prompts import (
     BUDGET_CHECK_PROMPT,
+    BUDGET_CONTEXT,
     NOVELTY_ANALYSIS_PROMPT,
     COMPLIANCE_CHECK_PROMPT,
     FINAL_EVALUATION_PROMPT,
@@ -34,12 +35,12 @@ GROQ_API_KEY = os.getenv('GROQ_API_KEY')
 #     max_tokens=4096,
 #     temperature= 0
 # )
-
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 llm = ChatOpenAI(
     model = "gpt-4o-mini",
     temperature= 0
 )
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+
 
 
 parser = StrOutputParser()
@@ -84,7 +85,7 @@ async def check_novelty(proposal_text: str) -> tuple[str,Score,set[str]]:
     })
     # final_response = "{}".format(response)
     response_score = score(proposal_text, context_text,response, llm)
-    return response_score, response_score, p_id
+    return response, response_score, p_id
 
 async def check_compliance(proposal_text: str) -> tuple[str, Score]:
     """
@@ -214,35 +215,35 @@ async def check_budget(proposal_text: str) -> tuple[str, Score]:
     Check compliance of a proposal with S&T guidelines.
     """
 
-    proposal_doc = Document(page_content=proposal_text)
-    _, embeddings_model = chunk_text_and_generate_embeddings([proposal_doc])
-    query_embedding = embeddings_model.embed_query(proposal_text)
-    print("Embedding type Budget Guidelines:", type(query_embedding))
-    results = query_collection(budget_collection, query_embedding, proposal_text, n_results=5,fetch_k=10)
-    context_text = ""
-    for i in range(len(results['documents'][0])):
-        doc_text = results['documents'][0][i]
-        metadata = results['metadatas'][0][i]
+    # proposal_doc = Document(page_content=proposal_text)
+    # _, embeddings_model = chunk_text_and_generate_embeddings([proposal_doc])
+    # query_embedding = embeddings_model.embed_query(proposal_text)
+    # print("Embedding type Budget Guidelines:", type(query_embedding))
+    # results = query_collection(budget_collection, query_embedding, proposal_text, n_results=5,fetch_k=10)
+    # context_text = ""
+    # for i in range(len(results['documents'][0])):
+    #     doc_text = results['documents'][0][i]
+    #     metadata = results['metadatas'][0][i]
 
-        context_text += f"\n{'='*80}\n"
-        context_text += f"Guideline {i+1}:\n"
-        context_text += f"Section ID: {metadata.get('section_id', 'N/A')}\n"
-        context_text += f"Title: {metadata.get('title', 'N/A')}\n"
-        context_text += f"Document: {metadata.get('doc_title', 'N/A')}\n"
-        context_text += f"\nContent:\n{doc_text}\n"
-        context_text += f"{'='*80}\n"
+    #     context_text += f"\n{'='*80}\n"
+    #     context_text += f"Guideline {i+1}:\n"
+    #     context_text += f"Section ID: {metadata.get('section_id', 'N/A')}\n"
+    #     context_text += f"Title: {metadata.get('title', 'N/A')}\n"
+    #     context_text += f"Document: {metadata.get('doc_title', 'N/A')}\n"
+    #     context_text += f"\nContent:\n{doc_text}\n"
+    #     context_text += f"{'='*80}\n"
 
     compliance_prompt = PromptTemplate(
         template=BUDGET_CHECK_PROMPT,
         input_variables=['proposal', 'context']
     )
-
+    context_text = BUDGET_CONTEXT
     chain = compliance_prompt | llm | parser
     response = chain.invoke({
         "proposal": proposal_text,
-        # "context": context_text
+        "context": context_text
     })
 
 
-    compliance_score = score(proposal_text, context_text,response, llm)
+    compliance_score = score(proposal_text, context_text, response, llm)
     return response, compliance_score

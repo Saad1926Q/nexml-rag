@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 from typing import Annotated
 
 class Score(BaseModel):
-    score: int = Field(..., ge=0, le=100, description="Score 0 to 100")
+    score: int = Field(..., ge=0, le=10, description="Score 0 to 10")
 
 class Assessment(BaseModel):
     summary: str
@@ -14,10 +14,6 @@ class EvaluationResponse(BaseModel):
     budget_assessment: Assessment
     evaluation: str
     proposal_ids: set
-    
-from pydantic import BaseModel
-
-from pydantic import BaseModel, Field
 
 class ProposalMetadata(BaseModel):
     proposal_id: Annotated[str, Field(..., description="Unique identifier for the research proposal")]
