@@ -6,6 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from dotenv import load_dotenv
 load_dotenv()
 from langchain_core.prompts import PromptTemplate
+from langchain_core.tools import tool
 from langchain_groq import ChatGroq
 from langchain_core.documents import Document
 from app.vector_db import proposals_collection, guidelines_collection, talk2proposal_collection, budget_collection
@@ -19,7 +20,12 @@ from app.prompts import (
 )
 from langchain_core.output_parsers import StrOutputParser, PydanticOutputParser
 from utils.utils import chunk_text_and_generate_embeddings, query_collection, score
+<<<<<<< HEAD
 from utils.schema import Score, EvaluationScore
+=======
+from utils.schema import Score,CoalRelevanceState
+from langchain_core.messages import SystemMessage, HumanMessage
+>>>>>>> f1cb0a9b8c92234fa0454a00385113d29d842fb2
 from supermemory import Supermemory
 from langchain_openai import ChatOpenAI
 SUPERMEMORY_API_KEY = os.getenv('SUPERMEMORY_API_KEY')
@@ -247,3 +253,54 @@ async def check_budget(proposal_text: str) -> tuple[str, Score]:
 
     compliance_score = score(proposal_text, context_text, response, llm)
     return response, compliance_score
+
+
+
+
+
+# ---------------------- RELEVANCE -------------------------------------------
+
+
+
+@tool
+def mark_relevant(explanation:str)->str:
+    """
+      Mark the proposal abstract as RELEVANT to Ministry of Coal.
+
+      Args:
+          explanation: 2-3 sentences explaining why it's relevant
+      """
+    
+    pass
+
+@tool
+def mark_irrelevant(explanation: str) -> str:
+      """
+      Mark the proposal abstract as NOT RELEVANT to Ministry of Coal.
+
+      Args:
+          explanation: 2-3 sentences explaining why it's not relevant
+      """
+      pass
+
+
+relevance_tools = [mark_relevant, mark_irrelevant]
+llm_with_relevance_tools = llm.bind_tools(relevance_tools,tool_choice="required")
+
+
+async def check_coal_relevance(abstract: str) -> dict:
+    system_prompt = """Evaluate if this research proposal is relevant to Ministry of Coal, India."""
+
+    messages = [
+          SystemMessage(content=system_prompt),
+          HumanMessage(content=abstract)
+      ]
+    
+    response = llm_with_relevance_tools.invoke(messages)
+
+    tool_call = response.tool_calls[0]
+    is_relevant = (tool_call["name"] == "mark_relevant")
+    explanation = tool_call["args"]["explanation"]
+
+
+    return {"is_relevant": is_relevant, "explanation": explanation}

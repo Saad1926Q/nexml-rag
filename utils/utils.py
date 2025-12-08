@@ -18,6 +18,8 @@ from utils.schema import Score
 from langchain_core.documents import Document
 from langchain_core.output_parsers import PydanticOutputParser
 import requests
+import re
+
 
 load_dotenv()
 SUPERMEMORY_API_KEY = os.getenv('SUPERMEMORY_API_KEY')
@@ -31,6 +33,14 @@ clip_processor = CLIPProcessor.from_pretrained(IMAGE_EMBEDDING_MODEL)
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 reranker_model = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2', device=device) 
 
+
+def extract_abstract(text: str) -> str:
+    pattern = r'abstract(.*?)(?=keywords:)'
+    match = re.search(pattern, text, re.IGNORECASE | re.DOTALL)
+
+    if match:
+        return match.group(1).strip()
+    return ""
 
 def chunk_text_and_generate_embeddings(docs):
     

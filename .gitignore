@@ -6,3 +6,4 @@ output_text.txt
 __pycache__
 .env
 chroma_db_data
+documents/All_Proposals_final_8th

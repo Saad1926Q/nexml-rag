@@ -17,7 +17,6 @@ dependencies = [
     "langchain-groq>=1.0.1",
     "langchain-huggingface>=1.0.1",
     "langchain-openai>=1.0.3",
-    "pymupdf>=1.26.6",
     "python-multipart>=0.0.20",
     "semanticscholar>=0.11.0",
     "sentence-transformers>=5.1.2",
