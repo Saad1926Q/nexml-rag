@@ -75,11 +75,11 @@ for idx, sample in enumerate(data, 1):
     question = sample['user_input']
     ground_truth = sample['reference']
     
-    # Embedding-based metrics (fast)
+    
     context_rel = context_relevance_score(response, contexts)
     answer_rel = answer_relevance_score(question, response)
     
-    # LLM-based metrics (slower, more accurate)
+    
     print(f"  Sample {idx}: Computing LLM metrics...", end=" ", flush=True)
     faithfulness = faithfulness_score(response, contexts)
     precision = context_precision_score(question, contexts)

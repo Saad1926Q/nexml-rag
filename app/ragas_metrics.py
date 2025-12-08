@@ -16,7 +16,7 @@ llm = ChatGroq(
 
 parser = StrOutputParser()
 
-# Import prompts from app.prompts
+
 from app.prompts import (
     FAITHFULNESS_PROMPT,
     CONTEXT_PRECISION_PROMPT,
