@@ -103,6 +103,7 @@ print(f"\nSuccessfully loaded guidelines into the vector database!")
 print(f"Total items in collection: {guidelines_collection.count()}")
 
 
+print(metadatas)
 #----------------------BUDGET VECTOR DB-------------------------------------
 budget_list,_ = extract_text_images_tables("documents/S&T Budget.pdf")
 
