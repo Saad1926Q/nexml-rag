@@ -178,7 +178,6 @@ def score(proposal_text, context_text, answer_text, llm):
     "answer": answer_text
 })
     return score_result
-    
 
 
 def save_file(tmp_file_path, metadata):
