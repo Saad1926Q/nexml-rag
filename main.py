@@ -4,12 +4,35 @@ import tempfile
 import os
 import json
 
-from app.llm import check_budget, check_novelty, check_compliance, final_evaluation, talk2proposal
+from app.llm import check_budget, check_novelty, check_compliance, final_evaluation, talk2proposal,check_coal_relevance
 from scripts.doc_extractor import extract_text_images_tables
 from fastapi.responses import JSONResponse
-from utils.utils import store_proposal_for_chat, save_file, delete_memory
+from utils.utils import store_proposal_for_chat, save_file, delete_memory,extract_abstract
 from utils.schema import Assessment, EvaluationResponse, ProposalMetadata
 app = FastAPI(title="NaCCER Auto-Evaluation")
+
+@app.post("/check_relevance")
+async def check_relevance(file: UploadFile = File(...)):
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
+        content = await file.read()
+        tmp_file.write(content)
+        tmp_file_path = tmp_file.name
+
+    try:
+        doc_list, _ = extract_text_images_tables(tmp_file_path)
+        proposal_text = doc_list[0].page_content
+
+        abstract = extract_abstract(proposal_text)
+
+        response = await check_coal_relevance(abstract)
+
+        return response
+
+    finally:
+        if os.path.exists(tmp_file_path):
+            os.remove(tmp_file_path)
+
+    
 
 @app.post("/evaluate")
 async def evaluate(file: UploadFile = File(...)):

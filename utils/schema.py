@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Annotated
+from typing import Annotated,TypedDict,List,Any
 
 class Score(BaseModel):
     score: int = Field(..., ge=0, le=100, description="Score 0 to 100")
@@ -15,9 +15,7 @@ class EvaluationResponse(BaseModel):
     evaluation: str
     proposal_ids: set
     
-from pydantic import BaseModel
 
-from pydantic import BaseModel, Field
 
 class ProposalMetadata(BaseModel):
     proposal_id: Annotated[str, Field(..., description="Unique identifier for the research proposal")]
@@ -27,5 +25,11 @@ class ProposalMetadata(BaseModel):
     research_area: Annotated[str, Field(..., description="Broad domain or research field the proposal belongs to")]
     keywords: Annotated[str, Field(..., description="Comma-separated key terms representing the core topics of the research")]
 
+class CoalRelevanceState(BaseModel):
+    """State passed through the relevance checking workflow"""
+    abstract: str
+    messages: List[Any]
+    is_relevant: bool
+    explanation: str
     
     
