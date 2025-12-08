@@ -91,7 +91,7 @@ def rerank(query: str, results: Dict[str, Any], top_k: int = 5) -> Dict[str, Any
 
 
 def query_collection(collection: Any, query_embedding: List[float], query_text: str,
-                     n_results: int = 5, fetch_k: int = 20) -> Dict[str, Any]:
+                     n_results: int = 5, fetch_k: int = 10) -> Dict[str, Any]:
     """
     Query a ChromaDB collection with an embedding vector and reranking.
 

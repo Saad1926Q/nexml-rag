@@ -4,7 +4,7 @@ import tempfile
 import os
 import json
 
-from app.llm import check_novelty, check_compliance, final_evaluation, talk2proposal
+from app.llm import check_budget, check_novelty, check_compliance, final_evaluation, talk2proposal
 from scripts.doc_extractor import extract_text_images_tables
 from fastapi.responses import JSONResponse
 from utils.utils import store_proposal_for_chat, save_file, delete_memory
@@ -24,6 +24,8 @@ async def evaluate(file: UploadFile = File(...)):
         
         novelty_res, novelty_score, p_id = await check_novelty(proposal_text)
         compliance_res, compliance_score = await check_compliance(proposal_text)
+        budget_res, budget_score = await check_budget(proposal_text)
+        
         final_res = await final_evaluation(proposal_text, novelty_res, compliance_res)
 
         return EvaluationResponse(
@@ -35,6 +37,10 @@ async def evaluate(file: UploadFile = File(...)):
                 summary=compliance_res,
                 score = compliance_score
             ),
+            budget_assessment= Assessment(
+                summary = budget_res,
+                score = budget_score
+                ),
             evaluation = final_res,
             proposal_ids = p_id
         )

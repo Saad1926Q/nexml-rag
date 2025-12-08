@@ -11,6 +11,7 @@ class Assessment(BaseModel):
 class EvaluationResponse(BaseModel):
     novelty_assessment: Assessment
     s_and_t_assessment: Assessment
+    budget_assessment: Assessment
     evaluation: str
     proposal_ids: set
     
