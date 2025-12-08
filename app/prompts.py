@@ -80,6 +80,8 @@ Finally, provide:
 - **Summary** of the proposal's strengths and weaknesses
 
 **YOUR DETAILED EVALUATION:**
+\n
+{format_description}
 """
 
 TALK2PROPOSAL_PROMPT = """You are an expert research proposal assistant for NACCER.
@@ -96,6 +98,7 @@ TALK2PROPOSAL_PROMPT = """You are an expert research proposal assistant for NACC
 - Keep your answer focused and concise
 
 **YOUR ANSWER:**
+
 """
 
 

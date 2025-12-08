@@ -17,9 +17,9 @@ from app.prompts import (
     FINAL_EVALUATION_PROMPT,
     TALK2PROPOSAL_PROMPT
 )
-from langchain_core.output_parsers import StrOutputParser
+from langchain_core.output_parsers import StrOutputParser, PydanticOutputParser
 from utils.utils import chunk_text_and_generate_embeddings, query_collection, score
-from utils.schema import Score
+from utils.schema import Score, EvaluationScore
 from supermemory import Supermemory
 from langchain_openai import ChatOpenAI
 SUPERMEMORY_API_KEY = os.getenv('SUPERMEMORY_API_KEY')
@@ -127,15 +127,16 @@ async def check_compliance(proposal_text: str) -> tuple[str, Score]:
 
 
 
-async def final_evaluation(proposal_text: str, novelty: str, compliance: str) -> str:
+async def final_evaluation(proposal_text: str, novelty: str, compliance: str) -> EvaluationScore:
     """
     Perform detailed evaluation of a proposal based on novelty and compliance assessments.
     Returns a text summary (LLM content). Optionally returns a small JSON summary embedded in the text.
     """
-
+    parser = PydanticOutputParser(pydantic_object = EvaluationScore)
     evaluation_prompt = PromptTemplate(
         template=FINAL_EVALUATION_PROMPT,
-        input_variables=['proposal', 'novelty', 'compliance']
+        input_variables=['proposal', 'novelty', 'compliance'],
+        partial_variables = {'format_description': parser.get_format_instructions()}
     )
 
     chain = evaluation_prompt | llm | parser
@@ -190,7 +191,6 @@ async def talk2proposal(question: str) -> str:
         limit = 7
         
     )
-    
     chain = talk2proposal_prompt | llm | parser
     response = chain.invoke({
         "question": question,

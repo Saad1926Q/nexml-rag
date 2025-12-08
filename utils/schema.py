@@ -4,6 +4,18 @@ from typing import Annotated
 class Score(BaseModel):
     score: int = Field(..., ge=0, le=10, description="Score 0 to 10")
 
+class EvaluationScore(BaseModel):
+    Budget:  int = Field(..., ge=0, le=10, description="Score 0 to 10")
+    Technical_Novelty: int = Field(..., ge=0, le=10, description="Score 0 to 10")
+    Technical_Feasibility: int = Field(..., ge=0, le=10, description="Score 0 to 10")
+    Expertise: int = Field(..., ge=0, le=10, description="Score 0 to 10")
+    Compliance_with_Guidelines: int = Field(..., ge=0, le=10, description="Score 0 to 10")
+    Industry_Relevance: int = Field(..., ge=0, le=10, description="Score 0 to 10")
+    Scalability: int = Field(..., ge=0, le=10, description="Score 0 to 10")
+    Sustainability: int = Field(..., ge=0, le=10, description="Score 0 to 10")
+    Impact: int = Field(..., ge=0, le=10, description="Score 0 to 10")
+    Summary: str = Field(..., description= "Explanation behind the evaluation report")
+    
 class Assessment(BaseModel):
     summary: str
     score: Score
@@ -12,7 +24,7 @@ class EvaluationResponse(BaseModel):
     novelty_assessment: Assessment
     s_and_t_assessment: Assessment
     budget_assessment: Assessment
-    evaluation: str
+    evaluation: EvaluationScore
     proposal_ids: set
 
 class ProposalMetadata(BaseModel):

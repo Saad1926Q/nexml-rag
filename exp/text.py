@@ -1,4 +1,24 @@
-a = "MINISTRY OF COAL - FINANCIAL COMPLIANCE REPORT\n\n1. OVERALL STATUS: NON-COMPLIANT\n\n2. FINANCIAL BREAKDOWN & CHECKS\n| Component | Proposed Amount (₹) | Allowed Limit (₹) | Status | Comments/Formula Used |\n| :--- | :--- | :--- | :--- | :--- |\n| Equipment | 1,480,935 | 100% | OK | Capital Cost |\n| Manpower | 1,042,903 | DST Norms | FAIL | Permanent staff salary is included. |\n| Consumables | 467,733 | SSRC Norms | OK | Revenue Cost |\n| Travel | 146,186 | ₹50k/yr (Norm) | HIGH | Exceeds the norm significantly. |\n| Contingency | 166,107 | 5% of Revenue Cost (₹166,107) | PASS | Limit = 5% of (Manpower + Consumables + Travel) |\n| Overheads | 396,463 | ₹15.0 Lakhs (or 10% of Total Cost) | FAIL | Exceeds allowable overhead limit. |\n| TOTAL | 3,720,363 | -- | -- | -- |\n\n3. DETAILED COMPLIANCE FINDINGS\n\n* Critical Violation: Manpower\n   - Permanent staff salaries are included in the proposal, which is prohibited. The proposal does not mention the engagement of SC and ST candidates.\n\n* Contingency Audit (Rule 4.13)\n   - Revenue Cost Base: ₹1,656,822 (1,042,903 + 467,733 + 146,186)\n   - Max Allowed (5%): ₹82,841\n   - Proposed: ₹166,107\n   - Verdict: FAIL. Proposed amount exceeds the allowed limit by ₹83,266.\n\n* Overhead Audit (Rule 4.14)\n   - Total Project Cost: ₹3,720,363\n   - Applicable Tier: Projects > ₹1.0 Cr and ≤ ₹5.0 Cr\n   - Max Allowed: ₹15.0 Lakhs (1,500,000)\n   - Proposed: ₹396,463\n   - Verdict: PASS. Proposed amount is within the allowable limit.\n\n4. REQUIRED CORRECTIONS\n* Remove salary component for permanent staff (₹1,042,903).\n* Include a statement regarding the engagement of at least one SC and one ST candidate.\n* Reduce the contingency budget to ₹82,841 to meet the 5% cap.\n* Justify the high travel cost exceeding the ₹50,000 norm."
+# from langchain_community.retrievers import ArxivRetriever
 
-b = "{}".format(a)
-print(b)
+# retriever = ArxivRetriever(
+#     load_max_docs=20,
+#     get_full_documents=True,
+#     load_all_available_meta=True
+# )
+
+# docs = retriever.invoke("""Mineral Processing; Advanced; Process; Sustainable""")
+# metadata = docs[0].metadata
+# print(metadata['entry_id'])    
+
+
+from semanticscholar import SemanticScholar
+
+from langchain_community.tools.semanticscholar.tool import SemanticScholarQueryRun
+
+query = """Mineral Processing; Advanced; Process; Sustainable"""
+ss_tool = SemanticScholarQueryRun()
+papers = ss_tool.run(query)
+
+for paper in papers:
+    print(paper.paperId)
+    print(paper.url)
