@@ -111,9 +111,9 @@ Retrieved context:
 Answer:
 {answer}
 
-Score from 0 to 100 how well the answer is supported by the context.
+Score from 0 to 10 how well the answer is supported by the context.
 0 = not supported or wrong.
-100 = fully supported and correct.
+10 = fully supported and correct.
 You MUST format your final answer **exactly** following the instructions below.
 Do not add any extra text before or after the JSON.\n
 \n
