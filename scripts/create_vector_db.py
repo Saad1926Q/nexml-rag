@@ -3,7 +3,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import pandas as pd
-from app.vector_db import proposals_collection,guidelines_collection
+from app.vector_db import proposals_collection,guidelines_collection, budget_collection
 from utils.utils import chunk_text_and_generate_embeddings
 from scripts.doc_extractor import extract_text_images_tables
 from langchain_core.documents import Document
@@ -72,6 +72,8 @@ print("\n" + "="*50)
 print("Processing Guidelines PDF...")
 print("="*50)
 
+
+#------------------------GUIDELINES DB----------------------------------------------------
 guidlines_list,_ = extract_text_images_tables("documents/S&T-Guidelines-MoC.pdf")
 
 print("Chunking guidelines and generating embeddings...")
@@ -102,3 +104,31 @@ print(f"Total items in collection: {guidelines_collection.count()}")
 
 
 print(metadatas)
+#----------------------BUDGET VECTOR DB-------------------------------------
+budget_list,_ = extract_text_images_tables("documents/S&T Budget.pdf")
+
+print("Chunking guidelines and generating embeddings...")
+chunked_docs, embeddings_model = chunk_text_and_generate_embeddings(budget_list)
+
+ids = []
+documents = []
+metadatas = []
+
+for i, doc in enumerate(tqdm(chunked_docs, desc="Preparing Budget Guidelines for ChromaDB")):
+    ids.append(f"Budget_guideline_{i}")
+    documents.append(doc.page_content)
+    metadatas.append(doc.metadata)
+
+print("\nGenerating embeddings for all budget guideline chunks...")
+all_embeddings = embeddings_model.embed_documents([doc.page_content for doc in chunked_docs])
+
+print("\nAdding budget guidelines to ChromaDB collection...")
+budget_collection.add(
+    ids=ids,
+    documents=documents,
+    embeddings=all_embeddings,
+    metadatas=metadatas
+)
+
+print(f"\nSuccessfully loaded budget guidelines into the vector database!")
+print(f"Total items in collection: {budget_collection.count()}")

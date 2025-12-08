@@ -14,6 +14,10 @@ guidelines_collection = client.get_or_create_collection(
     name="s_and_t_guidelines",
     metadata={"hnsw:space": "cosine"}
 )
+budget_collection = client.get_or_create_collection(
+    name="budget_guidelines",
+    metadata={"hnsw:space": "cosine"}
+)
 
 proposals_collection = client.get_or_create_collection(
     name="naccer_proposals",
