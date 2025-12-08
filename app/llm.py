@@ -8,8 +8,9 @@ load_dotenv()
 from langchain_core.prompts import PromptTemplate
 from langchain_groq import ChatGroq
 from langchain_core.documents import Document
-from app.vector_db import proposals_collection, guidelines_collection, talk2proposal_collection
+from app.vector_db import proposals_collection, guidelines_collection, talk2proposal_collection, budget_collection
 from app.prompts import (
+    BUDGET_CHECK_PROMPT,
     NOVELTY_ANALYSIS_PROMPT,
     COMPLIANCE_CHECK_PROMPT,
     FINAL_EVALUATION_PROMPT,
@@ -19,7 +20,7 @@ from langchain_core.output_parsers import StrOutputParser
 from utils.utils import chunk_text_and_generate_embeddings, query_collection, score
 from utils.schema import Score
 from supermemory import Supermemory
-
+from langchain_openai import ChatOpenAI
 SUPERMEMORY_API_KEY = os.getenv('SUPERMEMORY_API_KEY')
 client = Supermemory(
     api_key=SUPERMEMORY_API_KEY,
@@ -27,12 +28,19 @@ client = Supermemory(
 
 
 GROQ_API_KEY = os.getenv('GROQ_API_KEY')
-llm = ChatGroq(
-    groq_api_key=GROQ_API_KEY,
-    model_name="llama-3.1-8b-instant",
-    max_tokens=4096,
+# llm = ChatGroq(
+#     groq_api_key=GROQ_API_KEY,
+#     model_name="llama-3.1-8b-instant",
+#     max_tokens=4096,
+#     temperature= 0
+# )
+
+llm = ChatOpenAI(
+    model = "gpt-4o-mini",
     temperature= 0
 )
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+
 
 parser = StrOutputParser()
 
@@ -46,7 +54,7 @@ async def check_novelty(proposal_text: str) -> tuple[str,Score,set[str]]:
 
     print("Embedding type:", type(query_embedding))
 
-    results = query_collection(proposals_collection, query_embedding, proposal_text, n_results=5, fetch_k=20)
+    results = query_collection(proposals_collection, query_embedding, proposal_text, n_results=5, fetch_k=10)
 
     context_text = ""
     p_id = set()
@@ -115,6 +123,8 @@ async def check_compliance(proposal_text: str) -> tuple[str, Score]:
 
     compliance_score = score(proposal_text, context_text,response, llm)
     return response, compliance_score
+
+
 
 async def final_evaluation(proposal_text: str, novelty: str, compliance: str) -> str:
     """
@@ -198,3 +208,41 @@ async def talk2proposal(question: str) -> str:
 
 
 
+#--------------BUDGET------------------------------------------
+async def check_budget(proposal_text: str) -> tuple[str, Score]:
+    """
+    Check compliance of a proposal with S&T guidelines.
+    """
+
+    proposal_doc = Document(page_content=proposal_text)
+    _, embeddings_model = chunk_text_and_generate_embeddings([proposal_doc])
+    query_embedding = embeddings_model.embed_query(proposal_text)
+    print("Embedding type Budget Guidelines:", type(query_embedding))
+    results = query_collection(budget_collection, query_embedding, proposal_text, n_results=5,fetch_k=10)
+    context_text = ""
+    for i in range(len(results['documents'][0])):
+        doc_text = results['documents'][0][i]
+        metadata = results['metadatas'][0][i]
+
+        context_text += f"\n{'='*80}\n"
+        context_text += f"Guideline {i+1}:\n"
+        context_text += f"Section ID: {metadata.get('section_id', 'N/A')}\n"
+        context_text += f"Title: {metadata.get('title', 'N/A')}\n"
+        context_text += f"Document: {metadata.get('doc_title', 'N/A')}\n"
+        context_text += f"\nContent:\n{doc_text}\n"
+        context_text += f"{'='*80}\n"
+
+    compliance_prompt = PromptTemplate(
+        template=BUDGET_CHECK_PROMPT,
+        input_variables=['proposal', 'context']
+    )
+
+    chain = compliance_prompt | llm | parser
+    response = chain.invoke({
+        "proposal": proposal_text,
+        # "context": context_text
+    })
+
+
+    compliance_score = score(proposal_text, context_text,response, llm)
+    return response, compliance_score
