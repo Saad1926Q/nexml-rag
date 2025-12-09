@@ -50,8 +50,8 @@ async def evaluate(file: UploadFile = File(...)):
         
         novelty_res, novelty_score, p_id = await check_novelty(proposal_text)
         compliance_res, compliance_score = await check_compliance(proposal_text)
-        budget_res, budget_score = await check_budget(proposal_text)
-        
+        # budget_res, budget_score = await check_budget(proposal_text)
+        budget_res = await check_budget(proposal_text)
         final_res = await final_evaluation(proposal_text, novelty_res, compliance_res)
 
         return EvaluationResponse(
@@ -63,10 +63,11 @@ async def evaluate(file: UploadFile = File(...)):
                 summary=compliance_res,
                 score = compliance_score
             ),
-            budget_assessment= Assessment(
-                summary = budget_res,
-                score = budget_score
-                ),
+            # budget_assessment= Assessment(
+            #     summary = budget_res,
+            #     score = budget_score
+            #     ),
+            budget_assessment= budget_res,
             evaluation = final_res,
             proposal_ids = p_id
         )

@@ -20,12 +20,9 @@ from app.prompts import (
 )
 from langchain_core.output_parsers import StrOutputParser, PydanticOutputParser
 from utils.utils import chunk_text_and_generate_embeddings, query_collection, score
-<<<<<<< HEAD
-from utils.schema import Score, EvaluationScore
-=======
-from utils.schema import Score,CoalRelevanceState
+from utils.schema import BudgetAnalysis, Score, EvaluationScore
+from utils.schema import Score
 from langchain_core.messages import SystemMessage, HumanMessage
->>>>>>> f1cb0a9b8c92234fa0454a00385113d29d842fb2
 from supermemory import Supermemory
 from langchain_openai import ChatOpenAI
 SUPERMEMORY_API_KEY = os.getenv('SUPERMEMORY_API_KEY')
@@ -216,7 +213,9 @@ async def talk2proposal(question: str) -> str:
 
 
 #--------------BUDGET------------------------------------------
-async def check_budget(proposal_text: str) -> tuple[str, Score]:
+# async def check_budget(proposal_text: str) -> tuple[str, Score]:
+async def check_budget(proposal_text: str) -> BudgetAnalysis:
+
     """
     Check compliance of a proposal with S&T guidelines.
     """
@@ -238,10 +237,11 @@ async def check_budget(proposal_text: str) -> tuple[str, Score]:
     #     context_text += f"Document: {metadata.get('doc_title', 'N/A')}\n"
     #     context_text += f"\nContent:\n{doc_text}\n"
     #     context_text += f"{'='*80}\n"
-
+    parser = PydanticOutputParser(pydantic_object=BudgetAnalysis)
     compliance_prompt = PromptTemplate(
         template=BUDGET_CHECK_PROMPT,
-        input_variables=['proposal', 'context']
+        input_variables=['proposal', 'context'],
+        partial_variables= {'format_description': parser.get_format_instructions()}
     )
     context_text = BUDGET_CONTEXT
     chain = compliance_prompt | llm | parser
@@ -251,9 +251,9 @@ async def check_budget(proposal_text: str) -> tuple[str, Score]:
     })
 
 
-    compliance_score = score(proposal_text, context_text, response, llm)
-    return response, compliance_score
-
+    # compliance_score = score(proposal_text, context_text, response, llm)
+    # return response, compliance_score
+    return response
 
 
 

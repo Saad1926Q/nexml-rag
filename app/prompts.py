@@ -170,59 +170,27 @@ D. EQUIPMENT RULES (Section 4.10 & Annexure-II)
 ### 3. AUDIT INSTRUCTIONS (INTERNAL THOUGHT PROCESS)
 Perform the following calculations step-by-step before generating the report:
 1. Extract Financials: Identify Equipment, Manpower, Consumables, Travel, Contingency, Overheads, and Total Budget.
-2. Calculate Revenue Base: Sum (Manpower + Consumables + Travel).
-3. Check Contingency: 
-   - Limit A = 0.05 * Revenue Base. 
-   - Is Proposed > Limit A? 
-4. Check Overheads: 
-   - Determine the Project Tier (e.g., <1Cr, 1-5Cr).
-   - Calculate the exact allowable overhead amount based on the Tier Rules.
-   - Is Proposed > Allowable?
-5. Check Manpower Policy: Does the text mention "permanent staff salary" or miss the "SC/ST" clause?
 
+2. Check Manpower Policy: Does the text mention "permanent staff salary" or miss the "SC/ST" clause?
+
+3.  Check Manpower Policy: Does the text mention "permanent staff salary" or miss the "SC/ST" clause?
 ---
 
 ### 4. FINAL OUTPUT FORMAT
-Provide the output as a professional Compliance Summary Report using the structure below. Do not output JSON. Do not use bold markdown.
+Provide the output as a professional Compliance Summary Report using the structure below. 
+\n
+{format_description}
 
 MINISTRY OF COAL - FINANCIAL COMPLIANCE REPORT
 
 1. OVERALL STATUS: [COMPLIANT / NON-COMPLIANT / NEEDS REVISION]
 
-2. FINANCIAL BREAKDOWN & CHECKS
-| Component | Proposed Amount (₹) | Allowed Limit (₹) | Status | Comments/Formula Used |
-| :--- | :--- | :--- | :--- | :--- |
-| Equipment | [Value] | 100% | [OK/Review] | Capital Cost |
-| Manpower | [Value] | DST Norms | [OK/Fail] | [Check for permanent staff/SC-ST clause] |
-| Consumables | [Value] | SSRC Norms | [OK] | Revenue Cost |
-| Travel | [Value] | ₹50k/yr (Norm) | [OK/High] | Revenue Cost |
-| Contingency | [Value] | [Calc: 5% of Rev] | [PASS/FAIL] | Limit = 5% of (Manpower+Consum+Travel) |
-| Overheads | [Value] | [Calc: Based on Tier] | [PASS/FAIL] | Tier: [e.g. <1Cr = 10%] |
-| TOTAL | [Sum] | -- | -- | -- |
-
-3. DETAILED COMPLIANCE FINDINGS
+2. DETAILED COMPLIANCE FINDINGS
 
 * Critical Violation: Manpower
    - [State if permanent staff salaries are found (Prohibited) or if SC/ST engagement is missing. If Compliant, state "Adheres to DST norms and SC/ST mandate".]
 
-* Contingency Audit (Rule 4.13)
-   - Revenue Cost Base: ₹[Insert Value]
-   - Max Allowed (5%): ₹[Insert Value]
-   - Proposed: ₹[Insert Value]
-   - Verdict: [PASS/FAIL. If Fail, specify excess amount.]
 
-* Overhead Audit (Rule 4.14)
-   - Total Project Cost: ₹[Insert Value]
-   - Applicable Tier: [e.g., Projects up to ₹1.0 Cr]
-   - Max Allowed: ₹[Insert Value]
-   - Proposed: ₹[Insert Value]
-   - Verdict: [PASS/FAIL. If Fail, specify excess amount.]
-
-4. REQUIRED CORRECTIONS
-[Bulleted list of exact changes needed. Be specific. Example:]
-* Reduce Contingency budget by ₹25,000 to meet the 5% cap.
-* Remove salary component for Dr. X (Permanent Staff).
-* Add statement regarding engagement of SC/ST candidates.
 
 
 """

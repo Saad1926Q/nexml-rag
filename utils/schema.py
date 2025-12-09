@@ -15,6 +15,16 @@ class EvaluationScore(BaseModel):
     Sustainability: int = Field(..., ge=0, le=10, description="Score 0 to 10")
     Impact: int = Field(..., ge=0, le=10, description="Score 0 to 10")
     Summary: str = Field(..., description= "Explanation behind the evaluation report")
+
+class BudgetAnalysis(BaseModel):
+    Equipment  :  int = Field(..., ge=0,  description="Amount of Money Spent on Equipment")
+    Manpower : int = Field(..., ge=0,  description="Amount of Money spent on Manpower")
+    Consumables : int = Field(..., ge=0, description="Amount of Money spent on Consumables")
+    Travel : int = Field(..., ge=0,  description="Amount of Money spent on Travel")
+    Contingency : int = Field(..., ge=0,  description="Amount of Money spent on Contingency")
+    Overheads : int = Field(..., ge=0,  description="Amount of Money spent on Overheads")
+    Summary : str = Field(..., description= "Explanation behind the budget report")
+    Institution_Name : str = Field(..., description= "Give the name of the Institute")
     
 class Assessment(BaseModel):
     summary: str
@@ -23,7 +33,7 @@ class Assessment(BaseModel):
 class EvaluationResponse(BaseModel):
     novelty_assessment: Assessment
     s_and_t_assessment: Assessment
-    budget_assessment: Assessment
+    budget_assessment: BudgetAnalysis
     evaluation: EvaluationScore
     proposal_ids: set
 
