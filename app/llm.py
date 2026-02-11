@@ -199,7 +199,6 @@ async def talk2proposal(question: str) -> str:
         "question": question,
         "context": result
     })
-
     client.memories.add(
     content=f"[User_Query]:{question}\n\n[AI Message]:{response} ",
     container_tags =["Talk_2_Proposal"],
